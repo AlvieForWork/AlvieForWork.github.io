@@ -43,13 +43,23 @@
   --ink-border:         #4A423A;
 
   /* ---------- 字體 ---------- */
-  /* 英文不要用 Inter —— 它是 AI 生成網站的預設字體，用了自帶 AI 味 */
-  --font-display: "Bricolage Grotesque", "Noto Sans TC", sans-serif;
-  --font-body:    "Noto Sans TC", "Bricolage Grotesque", sans-serif;
+  /* 英文不要用 Inter —— 它是 AI 生成網站的預設字體，用了自帶 AI 味。
+     2026-08-19 改成襯線：襯線是出版物的語言不是軟體的語言，這是減少「科技感」最有效的一招。
 
-  /* 字重只用兩檔。層次全交給字級落差，不用 500/600 做中間過渡 */
+     標題這一組是同一個 stack 吃兩種語言 —— 英文落在 Instrument Serif、
+     中文自動 fallback 到思源宋體。不要手動拆 span，那會讓行高對不齊。 */
+  --font-display: "Instrument Serif", "Noto Serif TC", serif;
+  --font-body:    "Noto Sans TC", sans-serif;
+
+  /* 字重。層次全交給字級落差，不用 500/600 做中間過渡 */
   --fw-regular: 400;
   --fw-bold:    700;
+
+  /* ⚠️ Instrument Serif 只有 400，沒有粗體。
+     對它下 font-weight:700 瀏覽器會擠出假粗體（很醜）。
+     所以所有吃 --font-display 的地方一律用這個字重，中文標題跟著用 400 —— 
+     兩邊一致，而且「靠字級不靠字重」本來就是 PLAID 撐氣勢的做法 */
+  --fw-display: 400;
 
   /* ---------- 字級 ---------- */
   /* 字級跨度刻意拉大、中間層級砍掉。
@@ -207,9 +217,23 @@ a { color: inherit; text-decoration: none; }
 
 /* ---------- 螢光筆底線 ----------
    萊姆綠不能當字色，但可以墊在字底下。
-   這是這套色票裡「強調一段文字」的唯一做法 */
+   這是這套色票裡「強調一段文字」的唯一做法。
+
+   用偽元素不用 box-shadow: inset —— inset 陰影畫在 inline 元素的行框裡，
+   字級一大（hero 是 160px）就會整塊跑掉。偽元素才跟得住字 */
 .mark {
-  box-shadow: inset 0 -0.32em 0 var(--accent);
+  position: relative;
+  z-index: 0;
+}
+.mark::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  left: -0.05em;
+  right: -0.05em;
+  bottom: 0.14em;   /* 襯線的降部空間大，要往上壓才壓得到字 */
+  height: 0.15em;
+  background: var(--accent);
 }
 
 /* ---------- 髮絲細線（學 PLAID，成本近乎零的結構層） ---------- */
