@@ -30,8 +30,9 @@
   font-variation-settings: "opsz" 24;
 }
 
-/* 句號讓 wordmark 讀起來像一句話講完了。全站主色最小的一次露出 */
-.wordmark__dot { color: var(--accent); }
+/* 句號讓 wordmark 讀起來像一句話講完了。
+   這裡不用 --accent —— 萊姆綠在暖底上是 1.2:1，句號會直接消失 */
+.wordmark__dot { color: var(--text-primary); }
 
 .site-header__meta {
   font-size: var(--fs-sm);
@@ -73,9 +74,12 @@
   text-wrap: balance;
 }
 
+/* 重點字用螢光筆底線，不換字色。
+   萊姆綠當字色讀不到，墊在字底下才有效果（見 tokens.css 的 .mark） */
 .hero__display em {
   font-style: normal;
-  color: var(--accent);
+  color: inherit;
+  box-shadow: inset 0 -0.32em 0 var(--accent);
 }
 
 .hero__lead {

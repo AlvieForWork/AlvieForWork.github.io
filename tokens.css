@@ -3,10 +3,11 @@
    來源：作品集/接案網站-設計規格.md（2026-08-19 定案）
 
    硬規則（改任何東西之前先看這四條）：
-   1. 主色 --accent 可見面積 ≤ 5%，只給主要 CTA、重點字、小圖示
+   1. 主色 --accent 可見面積 ≤ 5%，只給主要 CTA、標籤、螢光筆底線
    2. 零 box-shadow —— 用暖米白底 + 白卡 + 圓角分層
    3. 零漸層、零玻璃擬態 —— 這是「AI 味」的核心特徵
    4. 中性色全部偏暖，不用純白純黑
+   5. --accent 只當底色，不當文字色。疊在它上面的字用 --accent-ink
    ========================================================================== */
 
 :root {
@@ -18,10 +19,14 @@
   --text-secondary: #6B625B;  /* 暖灰 */
   --border:         #E3DCD2;
 
-  /* ---------- 色彩：主色（珊瑚橘紅） ---------- */
-  --accent:         #FF4D2D;
-  --accent-hover:   #E63E1F;
-  --accent-tint:    rgba(255, 77, 45, 0.08);  /* 標籤、選中態 */
+  /* ---------- 色彩：主色（螢光萊姆綠） ---------- */
+  /* ⚠️ 這個綠太亮，在淺色底上當文字只有 1.2:1，完全讀不到。
+     它只能當「底色」用（按鈕、標籤、螢光筆底線），字一律用 --accent-ink。
+     需要綠色的文字時沒有解 —— 那是這個色票的代價，不要硬撐。 */
+  --accent:         #96FF1A;
+  --accent-hover:   #86E80F;
+  --accent-ink:     #1F1B18;                   /* 疊在主色上的字，一律用這個 */
+  --accent-tint:    rgba(150, 255, 26, 0.18);  /* 標籤、選中態 */
 
   /* ---------- 字體 ---------- */
   /* 英文不要用 Inter —— 它是 AI 生成網站的預設字體，用了自帶 AI 味 */
@@ -101,7 +106,7 @@ a { color: inherit; text-decoration: none; }
 
 ::selection {
   background: var(--accent);
-  color: #FFFFFF;
+  color: var(--accent-ink);
 }
 
 /* ==========================================================================
@@ -136,10 +141,11 @@ a { color: inherit; text-decoration: none; }
               color var(--duration) var(--ease);
 }
 
-/* 高承諾：實心主色。全站主色面積的大宗，所以其他地方要克制 */
+/* 高承諾：實心主色。全站主色面積的大宗，所以其他地方要克制。
+   字是暖黑不是白 —— 白字在螢光綠上只有 1.3:1，等於沒有字 */
 .btn--primary {
   background: var(--accent);
-  color: #FFFFFF;
+  color: var(--accent-ink);
 }
 .btn--primary:hover { background: var(--accent-hover); }
 
@@ -151,8 +157,9 @@ a { color: inherit; text-decoration: none; }
 }
 .btn--secondary:hover { border-color: var(--text-primary); }
 
+/* focus 外框不能用 --accent —— 它在暖底上看不見。用暖黑才有 16:1 */
 .btn:focus-visible {
-  outline: 2px solid var(--accent);
+  outline: 2px solid var(--text-primary);
   outline-offset: 3px;
 }
 
@@ -164,10 +171,23 @@ a { color: inherit; text-decoration: none; }
   padding: 6px var(--space-3);
   border-radius: var(--radius-pill);
   background: var(--accent-tint);
-  color: var(--accent);
+  color: var(--text-primary);
   font-size: var(--fs-sm);
   font-weight: var(--fw-bold);
   line-height: 1.4;
+}
+
+/* 需要更搶眼的標籤時用實心主色 */
+.pill--solid {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+/* ---------- 螢光筆底線 ----------
+   萊姆綠不能當字色，但可以墊在字底下。
+   這是這套色票裡「強調一段文字」的唯一做法 */
+.mark {
+  box-shadow: inset 0 -0.32em 0 var(--accent);
 }
 
 /* ---------- 髮絲細線（學 PLAID，成本近乎零的結構層） ---------- */
