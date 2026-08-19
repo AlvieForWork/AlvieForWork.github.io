@@ -1,0 +1,195 @@
+/* ==========================================================================
+   tokens.css — 設計 token 單一來源
+   來源：作品集/接案網站-設計規格.md（2026-08-19 定案）
+
+   硬規則（改任何東西之前先看這四條）：
+   1. 主色 --accent 可見面積 ≤ 5%，只給主要 CTA、重點字、小圖示
+   2. 零 box-shadow —— 用暖米白底 + 白卡 + 圓角分層
+   3. 零漸層、零玻璃擬態 —— 這是「AI 味」的核心特徵
+   4. 中性色全部偏暖，不用純白純黑
+   ========================================================================== */
+
+:root {
+  /* ---------- 色彩：中性 ---------- */
+  --bg:             #FAF7F2;  /* 暖米白，主底。不用純白是去 AI 味最有效的一招 */
+  --bg-alt:         #F2EDE5;  /* 次底，區塊交替、卡片群容器 */
+  --surface:        #FFFFFF;  /* 卡片。白卡浮在暖米白上，不用陰影就有層次 */
+  --text-primary:   #1F1B18;  /* 暖黑 */
+  --text-secondary: #6B625B;  /* 暖灰 */
+  --border:         #E3DCD2;
+
+  /* ---------- 色彩：主色（珊瑚橘紅） ---------- */
+  --accent:         #FF4D2D;
+  --accent-hover:   #E63E1F;
+  --accent-tint:    rgba(255, 77, 45, 0.08);  /* 標籤、選中態 */
+
+  /* ---------- 字體 ---------- */
+  /* 英文不要用 Inter —— 它是 AI 生成網站的預設字體，用了自帶 AI 味 */
+  --font-display: "Bricolage Grotesque", "Noto Sans TC", sans-serif;
+  --font-body:    "Noto Sans TC", "Bricolage Grotesque", sans-serif;
+
+  /* 字重只用兩檔。層次全交給字級落差，不用 500/600 做中間過渡 */
+  --fw-regular: 400;
+  --fw-bold:    700;
+
+  /* ---------- 字級 ---------- */
+  --fs-display: clamp(56px, 10vw, 112px);  /* 英文大標，只出現在 hero */
+  --fs-h1:      clamp(32px, 4.4vw, 48px);
+  --fs-h2:      32px;
+  --fs-h3:      20px;
+  --fs-lead:    18px;
+  --fs-body:    16px;
+  --fs-sm:      14px;
+  --fs-caption: 12px;
+
+  /* ---------- 行高：字越小行高越鬆 ---------- */
+  --lh-display: 0.95;
+  --lh-heading: 1.4;
+  --lh-body:    1.8;
+
+  /* ---------- 間距：4px grid ---------- */
+  --space-2:   8px;
+  --space-3:   12px;
+  --space-4:   16px;
+  --space-6:   24px;
+  --space-8:   32px;
+  --space-12:  48px;
+  --space-20:  80px;
+  --space-30:  120px;   /* 區塊上下留白 */
+
+  /* ---------- 圓角 ---------- */
+  --radius-sm:   16px;  /* 按鈕、小卡 */
+  --radius-lg:   24px;  /* 大卡片 */
+  --radius-pill: 999px; /* 藥丸標籤 */
+
+  /* ---------- 尺寸 ---------- */
+  --container:   1200px;
+  --gutter:      40px;
+  --btn-height:  52px;
+
+  /* ---------- 動效 ---------- */
+  --ease:     cubic-bezier(0.4, 0.4, 0, 1);
+  --duration: 0.3s;
+}
+
+/* ==========================================================================
+   Reset
+   ========================================================================== */
+
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  font-weight: var(--fw-regular);
+  line-height: var(--lh-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, p { margin: 0; }
+
+img, svg { display: block; max-width: 100%; }
+
+a { color: inherit; text-decoration: none; }
+
+::selection {
+  background: var(--accent);
+  color: #FFFFFF;
+}
+
+/* ==========================================================================
+   共用元件
+   ========================================================================== */
+
+.container {
+  width: 100%;
+  max-width: var(--container);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+/* ---------- 按鈕 ---------- */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  min-height: var(--btn-height);
+  padding: 0 var(--space-6);
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  font-weight: var(--fw-bold);
+  line-height: 1;
+  cursor: pointer;
+  transition: background-color var(--duration) var(--ease),
+              border-color var(--duration) var(--ease),
+              color var(--duration) var(--ease);
+}
+
+/* 高承諾：實心主色。全站主色面積的大宗，所以其他地方要克制 */
+.btn--primary {
+  background: var(--accent);
+  color: #FFFFFF;
+}
+.btn--primary:hover { background: var(--accent-hover); }
+
+/* 低承諾：透明底 + 描邊 */
+.btn--secondary {
+  background: transparent;
+  border-color: var(--border);
+  color: var(--text-primary);
+}
+.btn--secondary:hover { border-color: var(--text-primary); }
+
+.btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+/* ---------- 藥丸標籤 ---------- */
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px var(--space-3);
+  border-radius: var(--radius-pill);
+  background: var(--accent-tint);
+  color: var(--accent);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+  line-height: 1.4;
+}
+
+/* ---------- 髮絲細線（學 PLAID，成本近乎零的結構層） ---------- */
+
+.hairline {
+  height: 1px;
+  border: 0;
+  margin: 0;
+  background: var(--border);
+}
+
+/* ==========================================================================
+   無障礙
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

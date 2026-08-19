@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Alvie ｜ 網頁設計</title>
+  <meta name="description" content="我做網頁設計。用 AI 把產出速度拉到最滿，但每一個設計決定都是人做的。">
+
+  <!-- Threads 分享出去的預覽卡片吃這幾行。og:image 待補（1200×630） -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Alvie ｜ 網頁設計">
+  <meta property="og:description" content="用 AI 把產出速度拉到最滿，但每一個設計決定都是人做的。">
+  <meta property="og:url" content="https://alvieforwork.github.io/">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,700&family=Noto+Sans+TC:wght@400;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="tokens.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="container">
+      <a class="wordmark" href="/">Alvie<span class="wordmark__dot">.</span></a>
+      <p class="site-header__meta">網頁設計 ｜ 設計系統 ｜ Taipei</p>
+    </div>
+  </header>
+
+  <main>
+    <!-- ① HERO
+         ⚠️ 文案全部是暫定版，等在真實排版裡看過再定稿。
+         第二步要補：周圍傾斜散落的作品縮圖（E8D 權限管理、登入前五頁、
+         設計系統、stock-picker 的實際截圖） -->
+    <section class="hero">
+      <div class="hero__blob hero__blob--left" aria-hidden="true"></div>
+      <div class="hero__blob hero__blob--right" aria-hidden="true"></div>
+
+      <div class="container hero__inner">
+        <h1 class="hero__display">Design,<br>not <em>templates</em>.</h1>
+
+        <p class="hero__lead">
+          我做網頁設計。用 AI 把產出速度拉到最滿，<br>
+          但每一個設計決定，<strong>都是人做的</strong>。
+        </p>
+
+        <div class="hero__actions">
+          <!-- 低承諾（線框）→ 自檢表做好後換成實際下載連結 -->
+          <a class="btn btn--secondary" href="#">下載 AI 網站設計症狀自檢表</a>
+          <!-- 高承諾（實心）→ 聯絡方式定案後換成 mailto 或表單 -->
+          <a class="btn btn--primary" href="#">預約免費診斷</a>
+        </div>
+
+        <p class="hero__note">目前開放 3 個開場價名額</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container site-footer__inner">
+      <p>這個網站是我用 Claude Code 從設計到部署做出來的。</p>
+      <!-- 聯絡方式待定：Email 要不要公開、Threads 帳號還沒開 -->
+      <p>© 2026 Alvie</p>
+    </div>
+  </footer>
+
+</body>
+</html>

@@ -1,0 +1,208 @@
+/* ==========================================================================
+   style.css — 版面樣式
+   變數一律來自 tokens.css，這裡不重新定義任何 :root 變數，也不硬填色碼與 px
+   ========================================================================== */
+
+/* ==========================================================================
+   Header
+   ========================================================================== */
+
+.site-header {
+  position: absolute;
+  inset: 0 0 auto;
+  z-index: 10;
+  padding-block: var(--space-8);
+}
+
+.site-header .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-6);
+}
+
+.wordmark {
+  font-family: var(--font-display);
+  font-size: var(--fs-h3);
+  font-weight: var(--fw-bold);
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
+.wordmark__dot { color: var(--accent); }
+
+.site-header__meta {
+  font-size: var(--fs-sm);
+  color: var(--text-secondary);
+}
+
+/* ==========================================================================
+   Hero
+   ========================================================================== */
+
+.hero {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-height: 100svh;
+  padding-block: calc(var(--space-30) + var(--space-12)) var(--space-30);
+  overflow: hidden;
+}
+
+.hero__inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-8);
+  text-align: center;
+}
+
+/* 英文大標：漢字放到 100px 以上會擠成黑塊，所以大字級一律交給英文，
+   中文降到 lead 尺寸當說明（學 Geppy 的雙語分工） */
+.hero__display {
+  max-width: 14ch;
+  font-family: var(--font-display);
+  font-size: var(--fs-display);
+  font-weight: var(--fw-bold);
+  line-height: var(--lh-display);
+  letter-spacing: -0.035em;
+  /* Bricolage Grotesque 是 optical size 可變字體，大標要吃 opsz */
+  font-variation-settings: "opsz" 96;
+  text-wrap: balance;
+}
+
+.hero__display em {
+  font-style: normal;
+  color: var(--accent);
+}
+
+.hero__lead {
+  max-width: 34ch;
+  font-size: var(--fs-lead);
+  line-height: 1.9;
+  color: var(--text-secondary);
+  text-wrap: pretty;
+}
+
+.hero__lead strong {
+  font-weight: var(--fw-bold);
+  color: var(--text-primary);
+}
+
+.hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-3);
+  margin-top: var(--space-2);
+}
+
+.hero__note {
+  font-size: var(--fs-sm);
+  color: var(--text-secondary);
+}
+
+/* 被裁切的幾何色塊當區塊分隔（學 PLAID）。
+   用 --bg-alt 不用 --accent —— 主色留給 CTA 當唯一焦點 */
+.hero__blob {
+  position: absolute;
+  z-index: -1;
+  border-radius: var(--radius-pill);
+  background: var(--bg-alt);
+  pointer-events: none;
+}
+
+.hero__blob--left {
+  width: 44vw;
+  aspect-ratio: 1;
+  top: -14vw;
+  left: -18vw;
+}
+
+.hero__blob--right {
+  width: 30vw;
+  aspect-ratio: 1;
+  right: -12vw;
+  bottom: -14vw;
+}
+
+/* ==========================================================================
+   Footer
+   ========================================================================== */
+
+.site-footer {
+  padding-block: var(--space-12);
+}
+
+.site-footer__inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding-top: var(--space-8);
+  border-top: 1px solid var(--border);
+  font-size: var(--fs-sm);
+  color: var(--text-secondary);
+}
+
+.site-footer a {
+  border-bottom: 1px solid var(--border);
+  transition: border-color var(--duration) var(--ease),
+              color var(--duration) var(--ease);
+}
+
+.site-footer a:hover {
+  color: var(--text-primary);
+  border-color: var(--text-primary);
+}
+
+/* ==========================================================================
+   進場動效（prefers-reduced-motion 的關閉條件寫在 tokens.css）
+   ========================================================================== */
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: none; }
+}
+
+.hero__inner > * {
+  animation: rise 0.6s var(--ease) backwards;
+}
+
+.hero__inner > *:nth-child(1) { animation-delay: 0.00s; }
+.hero__inner > *:nth-child(2) { animation-delay: 0.06s; }
+.hero__inner > *:nth-child(3) { animation-delay: 0.12s; }
+.hero__inner > *:nth-child(4) { animation-delay: 0.18s; }
+
+/* ==========================================================================
+   RWD —— 桌機優先，但手機版必須做（客戶大量從 Threads 手機點進來）
+   ========================================================================== */
+
+@media (max-width: 720px) {
+  :root {
+    --gutter: 24px;
+  }
+
+  .site-header__meta { display: none; }
+
+  .hero {
+    min-height: auto;
+    padding-block: calc(var(--space-30) + var(--space-4)) var(--space-20);
+  }
+
+  .hero__display {
+    max-width: 100%;
+    font-variation-settings: "opsz" 48;
+    letter-spacing: -0.025em;
+  }
+
+  .hero__actions {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .hero__actions .btn { width: 100%; }
+
+  .site-footer__inner { flex-direction: column; align-items: flex-start; }
+}
