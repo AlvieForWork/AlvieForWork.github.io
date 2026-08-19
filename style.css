@@ -279,3 +279,296 @@
 
   .site-footer__inner { flex-direction: column; align-items: flex-start; }
 }
+
+/* ==========================================================================
+   區塊骨架
+   ========================================================================== */
+
+.section { padding-block: var(--space-30); }
+
+.section--alt  { background: var(--bg-alt); }
+
+/* 深色區塊：切開長頁的節奏。全站放兩塊，分布落在 20% 上下 */
+.section--dark {
+  background: var(--ink);
+  color: var(--ink-text);
+}
+
+.eyebrow {
+  margin-bottom: var(--space-4);
+  font-size: var(--fs-caption);
+  letter-spacing: 0.1em;
+  color: var(--text-secondary);
+}
+.section--dark .eyebrow { color: var(--ink-text-secondary); }
+
+.section__title {
+  max-width: 20ch;
+  font-family: var(--font-display);
+  font-size: var(--fs-h1);
+  font-weight: var(--fw-bold);
+  line-height: 1.2;
+  letter-spacing: -0.03em;
+  font-variation-settings: "opsz" 48;
+  text-wrap: balance;
+}
+
+/* 淺底上綠色只能墊在字底下；深底上 14.1:1，可以直接當字色 */
+.section__title em {
+  font-style: normal;
+  box-shadow: inset 0 -0.28em 0 var(--accent);
+}
+.section--dark .section__title em {
+  color: var(--accent);
+  box-shadow: none;
+}
+
+.section__lead {
+  max-width: 44ch;
+  margin-top: var(--space-4);
+  color: var(--text-secondary);
+}
+
+.grid-2, .grid-3, .grid-4 {
+  display: grid;
+  gap: var(--space-6);
+  margin-top: var(--space-12);
+}
+.grid-2 { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+.grid-3 { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+.grid-4 { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+
+/* ==========================================================================
+   ② 我能解決什麼 ／ ⑤ 合作流程 —— 深色卡片
+   ========================================================================== */
+
+.dcard {
+  padding: var(--space-8);
+  border-radius: var(--radius-none);
+  background: var(--ink-surface);
+}
+.dcard__num {
+  margin-bottom: var(--space-4);
+  font-family: var(--font-display);
+  font-size: 40px;
+  font-weight: var(--fw-bold);
+  line-height: 1;
+  color: var(--accent);
+}
+.dcard h3 { margin-bottom: var(--space-2); font-size: var(--fs-h3); font-weight: var(--fw-bold); }
+.dcard p  { font-size: var(--fs-sm); color: var(--ink-text-secondary); }
+
+.dnote {
+  margin-top: var(--space-12);
+  font-size: var(--fs-lead);
+  color: var(--ink-text-secondary);
+}
+.dnote em { font-style: normal; color: var(--ink-text); font-weight: var(--fw-bold); }
+
+/* ==========================================================================
+   ③ 服務與價格
+   ========================================================================== */
+
+.scard {
+  padding: var(--space-8);
+  border-radius: var(--radius-none);
+  background: var(--surface);
+}
+.scard__name  { margin: var(--space-4) 0 var(--space-2); font-size: var(--fs-h2); font-weight: var(--fw-bold); }
+.scard__price { margin-bottom: var(--space-6); }
+.scard__price b {
+  font-family: var(--font-display);
+  font-size: 36px;
+  font-weight: var(--fw-bold);
+  font-variation-settings: "opsz" 36;
+}
+.scard__price s { margin-left: var(--space-2); color: var(--text-secondary); font-size: var(--fs-body); }
+
+.ticks { margin: 0; padding: 0; list-style: none; }
+.ticks li {
+  position: relative;
+  padding-left: var(--space-6);
+  font-size: var(--fs-sm);
+  color: var(--text-secondary);
+}
+/* 打勾用暖黑不用主色 —— 主色在暖底上是 1.2:1，畫成線條會消失 */
+.ticks li::before {
+  content: "";
+  position: absolute;
+  left: 2px;
+  top: 0.75em;
+  width: 10px;
+  height: 5px;
+  border-left: 2px solid var(--text-primary);
+  border-bottom: 2px solid var(--text-primary);
+  transform: rotate(-45deg);
+}
+
+.sub { margin: var(--space-12) 0 var(--space-6); font-size: var(--fs-h3); font-weight: var(--fw-bold); }
+
+/* 六行單欄排下來會讓服務區塊胖成別區的兩倍，改兩欄 */
+.addons {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  column-gap: var(--space-12);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.addons li {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+  justify-content: space-between;
+  padding: var(--space-4) 0;
+  border-bottom: 1px solid var(--border);
+  font-size: var(--fs-sm);
+}
+.addons li span { color: var(--text-secondary); }
+.addons li b { font-weight: var(--fw-bold); }
+
+.fineprint { margin-top: var(--space-6); font-size: var(--fs-caption); color: var(--text-secondary); }
+
+/* ==========================================================================
+   ④ 案例 —— 一列一個、左右交錯（Antara 的 work-item / -reversed）
+   ========================================================================== */
+
+.works {
+  margin: var(--space-20) 0 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-30);
+}
+
+.work {
+  display: grid;
+  grid-template-columns: 1.35fr 1fr;
+  gap: var(--space-12);
+  align-items: center;
+  width: min(100% - var(--gutter) * 2, 1240px);
+  margin-inline: auto;
+}
+
+/* 交錯：偶數列圖片換到右邊。單純換 order，不重寫版型 */
+.work--reversed .work__media { order: 2; }
+
+.work__media {
+  aspect-ratio: 1.6 / 1;          /* Antara 的大圖是 1.54–1.64 */
+  display: grid;
+  place-items: center;
+  background: var(--bg-alt);
+  border-radius: var(--radius-none);
+}
+.work__ph { font-size: var(--fs-caption); color: var(--text-secondary); letter-spacing: .08em; }
+
+.work__meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-bottom: var(--space-6);
+  font-size: var(--fs-caption);
+  color: var(--text-secondary);
+}
+.work__title {
+  font-family: var(--font-display);
+  font-size: clamp(28px, 3.2vw, 44px);
+  font-weight: var(--fw-bold);
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  margin-bottom: var(--space-4);
+}
+.work__what { font-size: var(--fs-sm); color: var(--text-secondary); max-width: 42ch; }
+.work__key {
+  margin-top: var(--space-6);
+  padding-top: var(--space-6);
+  border-top: 1px solid var(--border);
+  font-size: var(--fs-sm);
+  max-width: 42ch;
+}
+.work__key b {
+  display: block;
+  margin-bottom: var(--space-2);
+  font-size: var(--fs-caption);
+  letter-spacing: 0.08em;
+  color: var(--text-secondary);
+  font-weight: var(--fw-regular);
+}
+
+/* ==========================================================================
+   ⑤ 合作流程 —— 直向時間線
+   ========================================================================== */
+
+.steps {
+  margin: var(--space-20) 0 0;
+  padding: 0;
+  list-style: none;
+  max-width: 760px;
+}
+
+.step {
+  display: grid;
+  grid-template-columns: 96px 1fr;
+  gap: var(--space-8);
+  padding-block: var(--space-8);
+  border-top: 1px solid var(--ink-border);
+}
+.step:last-child { border-bottom: 1px solid var(--ink-border); }
+
+.step__num {
+  font-family: var(--font-display);
+  font-size: 40px;
+  font-weight: var(--fw-bold);
+  line-height: 1;
+  color: var(--accent);
+}
+.step__body h3 { margin-bottom: var(--space-2); font-size: var(--fs-h3); font-weight: var(--fw-bold); }
+.step__body p  { font-size: var(--fs-sm); color: var(--ink-text-secondary); max-width: 48ch; }
+
+.dnote {
+  margin-top: var(--space-12);
+  font-size: var(--fs-lead);
+  color: var(--ink-text-secondary);
+}
+.dnote em { font-style: normal; color: var(--ink-text); font-weight: var(--fw-bold); }
+
+/* ==========================================================================
+   ⑥ 關於我 + 聯絡
+   ========================================================================== */
+
+.about {
+  display: grid;
+  gap: var(--space-12);
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  align-items: start;
+}
+.about__text p { margin-top: var(--space-4); color: var(--text-secondary); max-width: 44ch; }
+.about__text p:first-of-type { color: var(--text-primary); font-size: var(--fs-lead); }
+
+.about__cta {
+  padding: var(--space-8);
+  border-radius: var(--radius-none);
+  background: var(--surface);
+}
+.about__cta h3 { margin-bottom: var(--space-2); font-size: var(--fs-h3); font-weight: var(--fw-bold); }
+.about__cta p  { margin-bottom: var(--space-6); font-size: var(--fs-sm); color: var(--text-secondary); }
+.about__cta .hero__actions { justify-content: flex-start; margin: 0; }
+
+/* ==========================================================================
+   RWD
+   ========================================================================== */
+
+@media (max-width: 720px) {
+  .section { padding-block: var(--space-20); }
+  .section__title { max-width: 100%; }
+  .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; margin-top: var(--space-8); }
+  .works { gap: var(--space-20); margin-top: var(--space-12); }
+  .work { grid-template-columns: 1fr; gap: var(--space-6); }
+  .work--reversed .work__media { order: 0; }   /* 手機上不交錯，一律圖在上 */
+  .steps { margin-top: var(--space-12); }
+  .step { grid-template-columns: 1fr; gap: var(--space-3); }
+  .sub { margin-top: var(--space-12); }
+  .addons { grid-template-columns: 1fr; }
+  .about__cta .btn { width: 100%; }
+}
