@@ -57,6 +57,21 @@
 
         <p class="hero__note">目前開放 3 個開場價名額</p>
       </div>
+
+      <!-- 膠囊上的字就是在賣的東西，所以這是內容不是裝飾。
+           沒有 JS 或開啟「減少動態」時，它會是一排靜態的服務標籤 -->
+      <ul class="hero__tags" id="heroTags">
+        <li class="pill pill--solid">一頁式網站</li>
+        <li class="pill">多頁形象網站</li>
+        <li class="pill pill--solid">設計系統交付</li>
+        <li class="pill pill--line">RWD</li>
+        <li class="pill">tokens.css</li>
+        <li class="pill pill--line">theme.json</li>
+        <li class="pill pill--solid">去 AI 味</li>
+        <li class="pill">Figma Variables</li>
+        <li class="pill pill--line">交接清單</li>
+        <li class="pill pill--solid">做完不走鐘</li>
+      </ul>
     </section>
   </main>
 
@@ -67,6 +82,9 @@
       <p>© 2026 ALSO</p>
     </div>
   </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/matter-js@0.20.0/build/matter.min.js" defer></script>
+  <script src="physics.js" defer></script>
 
 </body>
 </html>

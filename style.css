@@ -53,11 +53,60 @@
 }
 
 .hero__inner {
+  position: relative;
+  z-index: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: var(--space-8);
   text-align: center;
+}
+
+/* ---------- 服務標籤 ----------
+   預設是一排靜態標籤（沒有 JS、或使用者關掉動效時就是長這樣）。
+   physics.js 接手後才會加上 .is-physics 改成物理掉落 */
+.hero__tags {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: var(--space-12);
+  z-index: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0 var(--gutter);
+  list-style: none;
+}
+
+/* 物理接手時：容器變成整個 hero，膠囊由 JS 逐一定位 */
+.hero__tags.is-physics {
+  inset: 0;
+  bottom: 0;
+  display: block;
+  padding: 0;
+}
+
+.hero__tags.is-physics .pill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  will-change: transform;
+  user-select: none;
+}
+
+/* 只有滑鼠裝置能拖 —— 手機上開啟拖曳會吃掉按鈕的點擊 */
+@media (pointer: fine) {
+  .hero__tags.is-physics .pill { cursor: grab; }
+  .hero__tags.is-physics .pill:active { cursor: grabbing; }
+}
+
+/* 膠囊三種樣式，對應 tokens.css 的 .pill / .pill--solid，另外補一個描邊版 */
+.pill--line {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-primary);
 }
 
 /* 英文大標：漢字放到 100px 以上會擠成黑塊，所以大字級一律交給英文，
@@ -167,6 +216,22 @@
    進場動效（prefers-reduced-motion 的關閉條件寫在 tokens.css）
    ========================================================================== */
 
+/* 關掉動效時標籤不跑物理，就不能再用絕對定位貼在底部 ——
+   那樣它會疊到說明文字上（手機尤其明顯）。改回正常排版流，排在文案下面 */
+@media (prefers-reduced-motion: reduce) {
+  .hero {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-12);
+  }
+
+  .hero__tags {
+    position: static;
+    padding-inline: var(--gutter);
+  }
+}
+
 @keyframes rise {
   from { opacity: 0; transform: translateY(16px); }
   to   { opacity: 1; transform: none; }
@@ -193,9 +258,11 @@
   .site-header__meta { display: none; }
 
   .hero {
-    min-height: auto;
+    /* 不改成 auto —— 膠囊需要一個明確的高度才有地板可落 */
     padding-block: calc(var(--space-30) + var(--space-4)) var(--space-20);
   }
+
+  .hero__tags { bottom: var(--space-6); }
 
   .hero__display {
     max-width: 100%;
