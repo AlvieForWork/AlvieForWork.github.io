@@ -67,27 +67,28 @@
   position: absolute;
   display: block;
   border-radius: var(--radius-blob);
-  opacity: 0.55;
+  /* 收斂：補上右側主視覺之後，色塊只當背景襯托，不再是畫面重點 */
+  opacity: 0.32;
   animation: drift 26s var(--ease) infinite alternate;
 }
 /* ⚠️ 每一團的底部都必須留在 hero 內。
    碰到 .blobs 的下緣會被 overflow:hidden 切成一條直線，圓潤感就沒了。
    被視窗左右邊緣切掉沒關係 —— 那看起來是刻意延伸出畫面 */
 .blob--1 {
-  width: 42vw; aspect-ratio: 1.15;
-  top: -18vw; right: -10vw;
+  width: 34vw; aspect-ratio: 1.15;
+  top: -16vw; right: -8vw;
   background: var(--tint-mint);
 }
 .blob--2 {
-  width: 26vw; aspect-ratio: 1;
-  top: 6vh; left: -13vw;
+  width: 20vw; aspect-ratio: 1;
+  top: 8vh; left: -10vw;
   background: var(--tint-blue);
   animation-duration: 32s;
   animation-delay: -8s;
 }
 .blob--3 {
-  width: 17vw; aspect-ratio: 0.9;
-  top: 26vh; right: 14vw;
+  width: 12vw; aspect-ratio: 0.9;
+  top: 30vh; right: 6vw;
   background: var(--tint-yellow);
   animation-duration: 38s;
   animation-delay: -16s;
@@ -106,9 +107,16 @@
 
 .hero {
   position: relative;
-  padding-block: var(--space-30) var(--space-20);
+  padding-block: var(--space-20) var(--space-20);
 }
-.hero__inner { position: relative; z-index: 1; }
+.hero__inner {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+  gap: var(--space-12);
+  align-items: center;
+}
 
 .hero__display {
   font-family: var(--font-display);
@@ -130,6 +138,174 @@
 
 .hero__actions { display: flex; flex-wrap: wrap; gap: var(--space-3); margin-top: var(--space-8); }
 .hero__note { margin-top: var(--space-4); font-size: var(--fs-sm); color: var(--text-secondary); }
+
+/* ==========================================================================
+   Hero 右側主視覺
+   全部純 CSS，沒有圖片依賴 —— 人物圖進來之前右側也不會是空的
+   ========================================================================== */
+
+/* 只給 aspect-ratio，不要再給 min-height —— 兩個一起下會互相打架，
+   高度被撐開後比例會反推出比欄位更寬的寬度 */
+.hero__visual {
+  position: relative;
+  aspect-ratio: 5 / 6;
+}
+
+/* ---------- 手機 mockup（GEPPY 是 300×547，這裡等比縮放） ---------- */
+
+.hv-phone {
+  position: absolute;
+  top: 2%;
+  right: 2%;
+  width: 56%;
+  aspect-ratio: 300 / 547;
+  padding: 10px;
+  border-radius: 32px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  box-shadow: 0 18px 44px rgba(31, 41, 51, 0.10);
+}
+.hv-phone__notch {
+  position: absolute;
+  top: 16px; left: 50%;
+  width: 28%; height: 5px;
+  border-radius: var(--radius-pill);
+  background: var(--border);
+  transform: translateX(-50%);
+}
+.hv-phone__screen {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  height: 100%;
+  padding: 30px 14px 16px;
+  border-radius: 24px;
+  background: var(--bg-alt);
+}
+
+.hv-row { display: block; border-radius: var(--radius-pill); background: var(--border); }
+.hv-row--title { width: 62%; height: 10px; background: var(--text-primary); opacity: 0.75; }
+.hv-row--sub   { width: 42%; height: 7px; }
+.hv-row--btn   { height: 30px; border-radius: 10px; background: var(--accent); margin-top: auto; }
+
+.hv-hero-block {
+  height: 30%;
+  border-radius: 14px;
+  background: var(--accent);
+  opacity: 0.22;
+}
+.hv-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.hv-cell {
+  aspect-ratio: 1.35;
+  border-radius: 10px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+}
+.hv-cell--fill { background: var(--accent); border-color: transparent; opacity: 0.85; }
+
+/* ---------- 人物圖容器 ---------- */
+
+.hv-person {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 58%;
+  aspect-ratio: 3 / 4;
+  margin: 0;
+  z-index: 2;
+}
+.hv-person img { width: 100%; height: 100%; object-fit: contain; object-position: bottom left; }
+.hv-person__hint { display: none; }
+
+/* 圖還沒放進來時：改畫一張浮動的介面小卡。
+   一開始做成虛線空框，結果右下角看起來就是「還沒做完」——
+   佔位要看起來像刻意的插畫，不是像 bug */
+.hv-person.is-empty {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 52%;
+  aspect-ratio: 4 / 5;
+  left: 2%;
+  bottom: 6%;
+  padding: 18px;
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  box-shadow: 0 14px 36px rgba(31, 41, 51, 0.08);
+}
+.hv-person.is-empty::before {
+  content: "";
+  height: 42%;
+  border-radius: 14px;
+  background: var(--tint-yellow);
+}
+.hv-person.is-empty::after {
+  content: "";
+  height: 8px;
+  width: 70%;
+  border-radius: var(--radius-pill);
+  background: var(--border);
+  box-shadow: 0 18px 0 -1px var(--border), 0 36px 0 -1px var(--accent);
+}
+.hv-person.is-empty .hv-person__hint { display: none; }
+
+/* ---------- 漂浮裝飾 ---------- */
+
+.hv-deco, .hv-bubble {
+  position: absolute;
+  display: block;
+  animation: float 7s var(--ease) infinite alternate;
+}
+
+.hv-deco--dot {
+  top: 6%; left: 12%;
+  width: 42px; aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--accent);
+}
+.hv-deco--ring {
+  top: 30%; left: 2%;
+  width: 62px; aspect-ratio: 1;
+  border-radius: 50%;
+  border: 8px solid var(--tint-yellow);
+  animation-delay: -2.4s;
+  animation-duration: 9s;
+}
+.hv-deco--tri {
+  bottom: 24%; right: 0;
+  width: 0; height: 0;
+  border-left: 20px solid transparent;
+  border-right: 20px solid transparent;
+  border-bottom: 34px solid var(--tint-blue);
+  animation-delay: -4s;
+  animation-duration: 8s;
+}
+
+/* 對話氣泡：右下角用非對稱圓角做出尖角（GEPPY 也用這招） */
+.hv-bubble {
+  border-radius: 20px 20px 20px 6px;
+}
+.hv-bubble--a {
+  top: 14%; right: 0;
+  width: 86px; height: 46px;
+  background: var(--tint-blue);
+  animation-delay: -1.2s;
+  animation-duration: 8.5s;
+}
+.hv-bubble--b {
+  top: 46%; right: 2%;
+  width: 62px; height: 40px;
+  background: var(--tint-yellow);
+  border-radius: 18px 18px 6px 18px;
+  animation-delay: -3.6s;
+  animation-duration: 10s;
+}
+
+@keyframes float {
+  from { transform: translateY(-6px) rotate(-2deg); }
+  to   { transform: translateY(8px) rotate(3deg); }
+}
 
 /* ==========================================================================
    區塊骨架
@@ -424,8 +600,17 @@
    RWD
    ========================================================================== */
 
-@media (max-width: 900px) {
+@media (max-width: 960px) {
   .nav { display: none; }
+
+  /* 820px 這種平板寬度撐不住兩欄，主視覺會擠到溢出 */
+  .hero__inner { grid-template-columns: minmax(0, 1fr); gap: var(--space-8); }
+  .hero__visual {
+    width: 100%;
+    max-width: 420px;
+    aspect-ratio: 4 / 3.4;
+    margin-inline: auto;
+  }
 }
 
 @media (max-width: 720px) {
@@ -445,6 +630,22 @@
 
   .hero__actions { flex-direction: column; }
   .hero__actions .btn { width: 100%; }
+
+  /* 主視覺移到大標下方，縮小但不拿掉 —— 右側空著才是原本的問題 */
+  /* 要寫 minmax(0,1fr) 不能只寫 1fr —— grid 項目的最小寬度預設是 auto，
+     大標放不下時會把欄位撐開，整頁就多出橫向捲動 */
+  .hero__inner { grid-template-columns: minmax(0, 1fr); gap: var(--space-8); }
+  /* min-height 不能跟 aspect-ratio 同時給：高度被撐到 300 之後，
+     比例會反推出比欄位還寬的寬度，於是多出橫向捲動 */
+  .hero__visual {
+    width: 100%;
+    max-width: 380px;
+    min-height: 0;
+    aspect-ratio: 4 / 3.4;
+    margin-inline: auto;
+  }
+  .hv-deco--ring, .hv-bubble--b { display: none; }
+  .hv-deco, .hv-bubble { animation: none; }
 
   /* 手機上有機色塊縮小、且不跑動畫（省電） */
   .blob { opacity: 0.4; animation: none; }

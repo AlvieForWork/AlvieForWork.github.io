@@ -52,13 +52,50 @@
       </div>
 
       <div class="container hero__inner">
-        <h1 class="hero__display" data-reveal>Design,<br>not <em>templates.</em></h1>
-        <p class="hero__lead" data-reveal>我做網頁設計。用 AI 把產出速度拉到最滿，但每一個設計決定，<strong>都是人做的</strong>。</p>
-        <div class="hero__actions" data-reveal>
-          <a class="btn btn--primary" href="#about">預約免費診斷</a>
-          <a class="btn btn--secondary" href="#about">下載自檢表</a>
+        <div class="hero__copy">
+          <h1 class="hero__display" data-reveal>Design, and<br><em>also</em> more.</h1>
+          <p class="hero__lead" data-reveal>我做網頁設計。用 AI 把產出速度拉到最滿，但每一個設計決定，<strong>都是人做的</strong>。</p>
+          <div class="hero__actions" data-reveal>
+            <a class="btn btn--primary" href="#about">預約免費診斷</a>
+            <a class="btn btn--secondary" href="#about">下載自檢表</a>
+          </div>
+          <p class="hero__note" data-reveal>目前開放 3 個開場價名額</p>
         </div>
-        <p class="hero__note" data-reveal>目前開放 3 個開場價名額</p>
+
+        <!-- 右側主視覺。全部純 CSS，沒有圖片依賴。
+             人物圖放進 .hv-person 之後，佔位文字會自動被蓋掉 -->
+        <div class="hero__visual" data-reveal>
+          <!-- 手機 mockup（GEPPY 的是 300×547，這裡等比） -->
+          <div class="hv-phone" aria-hidden="true">
+            <span class="hv-phone__notch"></span>
+            <div class="hv-phone__screen">
+              <span class="hv-row hv-row--title"></span>
+              <span class="hv-row hv-row--sub"></span>
+              <div class="hv-hero-block"></div>
+              <div class="hv-grid">
+                <span class="hv-cell hv-cell--fill"></span>
+                <span class="hv-cell"></span>
+                <span class="hv-cell"></span>
+                <span class="hv-cell hv-cell--fill"></span>
+              </div>
+              <span class="hv-row hv-row--btn"></span>
+            </div>
+          </div>
+
+          <!-- 人物去背圖的位置。放圖前先用幾何填著，右側不會空 -->
+          <figure class="hv-person">
+            <img src="img/person.png" alt="" loading="lazy"
+                 onerror="this.closest('.hv-person').classList.add('is-empty'); this.remove();">
+            <figcaption class="hv-person__hint">人物圖待補<br><small>img/person.png</small></figcaption>
+          </figure>
+
+          <!-- 漂浮裝飾 -->
+          <span class="hv-deco hv-deco--dot"   aria-hidden="true"></span>
+          <span class="hv-deco hv-deco--ring"  aria-hidden="true"></span>
+          <span class="hv-deco hv-deco--tri"   aria-hidden="true"></span>
+          <span class="hv-bubble hv-bubble--a" aria-hidden="true"></span>
+          <span class="hv-bubble hv-bubble--b" aria-hidden="true"></span>
+        </div>
       </div>
     </section>
 
