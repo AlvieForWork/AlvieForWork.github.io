@@ -25,52 +25,41 @@
 <body>
 
   <header class="site-header">
-    <div class="container">
-      <a class="wordmark" href="/">ALSO<span class="wordmark__dot">.</span></a>
-      <p class="site-header__meta">網頁設計 ｜ 設計系統 ｜ Taipei</p>
+    <div class="site-header__inner">
+      <a class="wordmark" href="/">ALSO</a>
+      <nav class="nav">
+        <a href="#cases">作品</a>
+        <a href="#services">服務</a>
+        <a href="#flow">流程</a>
+        <a href="#about">關於</a>
+      </nav>
+      <a class="btn-oval" href="#about">預約免費診斷</a>
     </div>
   </header>
 
   <main>
-    <!-- ① HERO
-         ⚠️ 文案全部是暫定版，等在真實排版裡看過再定稿。
-         第二步要補：周圍傾斜散落的作品縮圖（E8D 權限管理、登入前五頁、
-         設計系統、stock-picker 的實際截圖） -->
+    <!-- ① HERO —— 照 Antara：每一行有自己的縮排，字間固定 36px。
+         沒有置中大標＋兩顆按鈕，只有大標與捲動指示 -->
     <section class="hero">
-      <div class="hero__blob hero__blob--left" aria-hidden="true"></div>
-      <div class="hero__blob hero__blob--right" aria-hidden="true"></div>
+      <h1 class="hero__display">
+        <span class="ln ln--a"><i>Design,</i></span>
+        <span class="ln ln--b"><i>not</i></span>
+        <span class="ln ln--c"><i>templates.</i></span>
+      </h1>
 
-      <div class="container hero__inner">
-        <h1 class="hero__display">Design,<br>not <em>templates</em>.</h1>
+      <p class="hero__lead">我做網頁設計。用 AI 把產出速度拉到最滿，但每一個設計決定，<strong>都是人做的</strong>。</p>
 
-        <p class="hero__lead">
-          我做網頁設計。用 AI 把產出速度拉到最滿，但每一個設計決定，<strong>都是人做的</strong>。
-        </p>
-
-        <div class="hero__actions">
-          <!-- 低承諾（線框）→ 自檢表做好後換成實際下載連結 -->
-          <a class="btn btn--secondary" href="#">下載 AI 網站設計症狀自檢表</a>
-          <!-- 高承諾（實心）→ 聯絡方式定案後換成 mailto 或表單 -->
-          <a class="btn btn--primary" href="#">預約免費診斷</a>
-        </div>
-
-        <p class="hero__note">目前開放 3 個開場價名額</p>
+      <div class="hero__scroll" aria-hidden="true">
+        <!-- 圓周文字要用 SVG textPath，用 div 加 text-align:center 只會擠成一團 -->
+        <svg class="hero__scroll-ring" viewBox="0 0 100 100">
+          <defs>
+            <path id="ringPath" fill="none"
+                  d="M 50,50 m -36,0 a 36,36 0 1,1 72,0 a 36,36 0 1,1 -72,0" />
+          </defs>
+          <text><textPath href="#ringPath" startOffset="0">SCROLL DOWN · SCROLL DOWN · </textPath></text>
+        </svg>
+        <span class="hero__scroll-line"></span>
       </div>
-
-      <!-- 膠囊上的字就是在賣的東西，所以這是內容不是裝飾。
-           沒有 JS 或開啟「減少動態」時，它會是一排靜態的服務標籤 -->
-      <ul class="hero__tags" id="heroTags">
-        <li class="pill pill--solid">一頁式網站</li>
-        <li class="pill">多頁形象網站</li>
-        <li class="pill pill--solid">設計系統交付</li>
-        <li class="pill pill--line">RWD</li>
-        <li class="pill">tokens.css</li>
-        <li class="pill pill--line">theme.json</li>
-        <li class="pill pill--solid">去 AI 味</li>
-        <li class="pill">Figma Variables</li>
-        <li class="pill pill--line">交接清單</li>
-        <li class="pill pill--solid">做完不走鐘</li>
-      </ul>
     </section>
 
     <!-- ② 我能解決什麼問題（深色區塊 1／2） -->
@@ -143,69 +132,59 @@
       </div>
     </section>
 
-    <!-- ④ 案例 —— 三件三種版型，不是同一個模板交替。
-         文案內容未改動，只換排版與加動態 -->
-    <section class="section" id="cases">
+    <!-- ④ 作品 —— 照 Antara /work 的 work-item：
+         文字欄置中、大圖偏出容器一側、小圖偏出另一側並與大圖垂直交錯 -->
+    <section class="section works" id="cases">
       <div class="container">
-        <p class="eyebrow">案例</p>
-        <h2 class="section__title">差異化不是畫面好看，是決策說得清楚。</h2>
+        <p class="works-header"><span>精選作品</span><span>PROJECTS</span></p>
       </div>
 
-      <ol class="works">
-
-        <!-- 01：滿版出血大圖，文字靠左佔 40%，右邊大留白 -->
-        <li class="work work--bleed" data-reveal>
-          <figure class="work__media work__media--bleed" data-parallax>
-            <span class="work__ph">畫面截圖待補</span>
-            <span class="work__index">01–003</span>
-          </figure>
-          <div class="container">
-            <div class="work__body">
-              <p class="work__meta"><span class="pill">企業後台</span><span>2026</span></p>
-              <h3 class="work__title">8 種角色的權限管理</h3>
-              <p class="work__what">子帳號、部門、操作紀錄、批次匯入四個模組，從資訊架構盤點做到可點擊的原型。</p>
-              <p class="work__key"><b>一個關鍵決策</b>模擬身份不做進帳號卡的標籤，改成獨立的浮動列。因為「我現在是誰」和「我的帳號是誰」是兩件事，混在一起使用者會誤判自己有沒有權限。</p>
+      <ol class="works-list">
+        <li class="work-item" data-reveal>
+          <div class="work-item__inner">
+            <div class="work-content">
+              <div class="work-info">
+                <span class="work-num">01–003</span>
+                <p class="work-client">企業後台 ／ 2026</p>
+                <h3 class="work-title">8 種角色的權限管理</h3>
+                <p class="work-what">子帳號、部門、操作紀錄、批次匯入四個模組，從資訊架構盤點做到可點擊的原型。</p>
+                <p class="work-key"><b>一個關鍵決策</b>模擬身份不做進帳號卡的標籤，改成獨立的浮動列。因為「我現在是誰」和「我的帳號是誰」是兩件事，混在一起使用者會誤判自己有沒有權限。</p>
+              </div>
+              <figure class="work-s-img" data-parallax><span class="ph">細節圖</span></figure>
             </div>
+            <figure class="work-l-img" data-parallax><span class="ph">主視覺</span></figure>
           </div>
         </li>
-
-        <!-- 02：超大標題吃掉左邊 2/3，小圖偏右下、刻意不對齊 -->
-        <li class="work work--offset" data-reveal>
-          <div class="container work__grid">
-            <div class="work__body">
-              <p class="work__index">02–003</p>
-              <p class="work__meta"><span class="pill">登入與帳號安全</span><span>2026</span></p>
-              <h3 class="work__title work__title--xl">登入前五頁與雙因素驗證</h3>
-              <p class="work__what">登入、2FA 綁定、忘記密碼、鎖定、解鎖，五頁共用一份 token 檔與一套版型規範。</p>
-              <p class="work__key"><b>一個關鍵決策</b>密碼鎖與驗證碼鎖是兩個獨立的永久鎖，都只能由客服解。自動解鎖等於給暴力破解無限次機會，而兩種鎖混用會讓客服查不出使用者到底卡在哪。</p>
+        <li class="work-item -reversed" data-reveal>
+          <div class="work-item__inner">
+            <div class="work-content">
+              <div class="work-info">
+                <span class="work-num">02–003</span>
+                <p class="work-client">登入與帳號安全 ／ 2026</p>
+                <h3 class="work-title">登入前五頁與雙因素驗證</h3>
+                <p class="work-what">登入、2FA 綁定、忘記密碼、鎖定、解鎖，五頁共用一份 token 檔與一套版型規範。</p>
+                <p class="work-key"><b>一個關鍵決策</b>密碼鎖與驗證碼鎖是兩個獨立的永久鎖，都只能由客服解。自動解鎖等於給暴力破解無限次機會，而兩種鎖混用會讓客服查不出使用者到底卡在哪。</p>
+              </div>
+              <figure class="work-s-img" data-parallax><span class="ph">細節圖</span></figure>
             </div>
-            <figure class="work__media work__media--square" data-parallax>
-              <span class="work__ph">畫面截圖待補</span>
-            </figure>
+            <figure class="work-l-img" data-parallax><span class="ph">主視覺</span></figure>
           </div>
         </li>
-
-        <!-- 03：大小雙圖錯落，小圖疊在大圖右下並偏出容器 -->
-        <li class="work work--pair" data-reveal>
-          <div class="container work__grid">
-            <div class="work__stack">
-              <figure class="work__media work__media--wide" data-parallax>
-                <span class="work__ph">畫面截圖待補</span>
-              </figure>
-              <figure class="work__media work__media--small" data-parallax>
-                <span class="work__ph">細節圖待補</span>
-              </figure>
+        <li class="work-item" data-reveal>
+          <div class="work-item__inner">
+            <div class="work-content">
+              <div class="work-info">
+                <span class="work-num">03–003</span>
+                <p class="work-client">自己的產品 ／ 2026</p>
+                <h3 class="work-title">選股條件篩選工具</h3>
+                <p class="work-what">從想法到上線的完整流程：規格、介面、前後端、部署，一個人用 AI 協作完成。</p>
+                <p class="work-key"><b>一個關鍵決策</b>把判斷條件攤開讓使用者自己調，不做「推薦清單」。工具給的是理由，不是答案 —— 一旦給答案就要為結果負責，那是另一種生意。</p>
+              </div>
+              <figure class="work-s-img" data-parallax><span class="ph">細節圖</span></figure>
             </div>
-            <div class="work__body">
-              <p class="work__index">03–003</p>
-              <p class="work__meta"><span class="pill">自己的產品</span><span>2026</span></p>
-              <h3 class="work__title">選股條件篩選工具</h3>
-              <p class="work__what">從想法到上線的完整流程：規格、介面、前後端、部署，一個人用 AI 協作完成。</p>
-              <p class="work__key"><b>一個關鍵決策</b>把判斷條件攤開讓使用者自己調，不做「推薦清單」。工具給的是理由，不是答案 —— 一旦給答案就要為結果負責，那是另一種生意。</p>
-            </div>
+            <figure class="work-l-img" data-parallax><span class="ph">主視覺</span></figure>
           </div>
         </li>
-
       </ol>
     </section>
 
@@ -279,8 +258,10 @@
     </div>
   </footer>
 
+  <!-- 膠囊物理暫時停用：Antara 的 hero 只有大標與捲動指示。要還原就把這兩行取消註解
   <script src="https://cdn.jsdelivr.net/npm/matter-js@0.20.0/build/matter.min.js" defer></script>
   <script src="physics.js" defer></script>
+  -->
   <script src="reveal.js" defer></script>
 
 </body>

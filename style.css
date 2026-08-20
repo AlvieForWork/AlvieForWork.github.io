@@ -4,7 +4,16 @@
    ========================================================================== */
 
 /* ==========================================================================
-   Header
+   Header ／ Hero ／ 作品 —— 照 antara.studio/work 的量測值重建
+
+   量到的骨架（1440 視窗）：
+     hero 大標   RecifeDisplay 144px / line-height 144px / weight 300，四行
+                 每行有自己的縮排（+142 / 0 / +177 / +71），字間固定 36px
+     work-item   1118 寬，文字欄 284 寬且【置中對齊】
+                 編號縮排 +90、客戶名 14px uppercase、標題襯線 27px
+                 大圖 867×547，往下偏移 216，並偏出容器一側約 116
+                 小圖 247×261，往下偏移 359，偏出【文字那一側】約 108
+     項目間距    590（item 高 490，所以相鄰兩件會垂直交錯）
    ========================================================================== */
 
 .site-header {
@@ -13,184 +22,243 @@
   z-index: 10;
   padding-block: var(--space-8);
 }
-
-.site-header .container {
+.site-header__inner {
   display: flex;
   align-items: center;
-  justify-content: space-between;
   gap: var(--space-6);
+  width: 100%;
+  max-width: var(--container);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
 }
-
 .wordmark {
-  font-family: var(--font-display);
-  font-size: var(--fs-h3);
-  font-weight: var(--fw-display);
-  line-height: 1;
-  letter-spacing: 0.02em;
-}
-
-/* 句號讓 wordmark 讀起來像一句話講完了。
-   這裡不用 --accent —— 萊姆綠在暖底上是 1.2:1，句號會直接消失 */
-.wordmark__dot { color: var(--text-primary); }
-
-.site-header__meta {
+  font-family: var(--font-body);
   font-size: var(--fs-sm);
-  color: var(--text-secondary);
+  font-weight: var(--fw-bold);
+  letter-spacing: 0.18em;
 }
+.nav {
+  display: flex;
+  gap: var(--space-6);
+  margin-left: auto;
+  font-size: var(--fs-sm);
+}
+.nav a { position: relative; }
+/* 動態底線：從左展開 */
+.nav a::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; bottom: -4px;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--duration) var(--ease);
+}
+.nav a:hover::after { transform: scaleX(1); }
 
-/* ==========================================================================
-   Hero
-   ========================================================================== */
+/* 橢圓外框的 CTA（Antara 右上角那顆） */
+.btn-oval {
+  padding: 10px 20px;
+  border: 1px solid var(--text-primary);
+  border-radius: var(--radius-pill);
+  font-size: var(--fs-sm);
+  transition: background-color var(--duration) var(--ease), color var(--duration) var(--ease);
+}
+.btn-oval:hover { background: var(--text-primary); color: var(--bg); }
+
+/* ---------- Hero ---------- */
 
 .hero {
   position: relative;
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  justify-content: center;
   min-height: 100svh;
-  padding-block: calc(var(--space-30) + var(--space-12)) var(--space-30);
+  padding: calc(var(--space-30) + var(--space-12)) var(--gutter) var(--space-30);
   overflow: hidden;
 }
 
-.hero__inner {
-  position: relative;
-  z-index: 1;
+.hero__display {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: var(--space-8);
-  text-align: center;
-}
-
-/* ---------- 服務標籤 ----------
-   預設是一排靜態標籤（沒有 JS、或使用者關掉動效時就是長這樣）。
-   physics.js 接手後才會加上 .is-physics 改成物理掉落 */
-.hero__tags {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: var(--space-12);
-  z-index: 0;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: var(--space-2);
-  margin: 0;
-  padding: 0 var(--gutter);
-  list-style: none;
-}
-
-/* 物理接手時：容器變成整個 hero，膠囊由 JS 逐一定位 */
-.hero__tags.is-physics {
-  inset: 0;
-  bottom: 0;
-  display: block;
-  padding: 0;
-}
-
-.hero__tags.is-physics .pill {
-  position: absolute;
-  top: 0;
-  left: 0;
-  will-change: transform;
-  user-select: none;
-}
-
-/* 只有滑鼠裝置能拖 —— 手機上開啟拖曳會吃掉按鈕的點擊 */
-@media (pointer: fine) {
-  .hero__tags.is-physics .pill { cursor: grab; }
-  .hero__tags.is-physics .pill:active { cursor: grabbing; }
-}
-
-/* 膠囊三種樣式，對應 tokens.css 的 .pill / .pill--solid，另外補一個描邊版 */
-.pill--line {
-  background: transparent;
-  border: 1px solid var(--border);
-  color: var(--text-primary);
-}
-
-/* 英文大標：漢字放到 100px 以上會擠成黑塊，所以大字級一律交給英文，
-   中文降到 lead 尺寸當說明（學 Geppy 的雙語分工） */
-.hero__display {
-  max-width: 14ch;
+  width: 100%;
+  max-width: var(--container);
+  margin-inline: auto;
   font-family: var(--font-display);
-  font-size: var(--fs-display);
   font-weight: var(--fw-display);
-  line-height: var(--lh-display);
-  letter-spacing: -0.035em;
-  text-wrap: balance;
+  font-size: clamp(64px, 11.5vw, 168px);
+  line-height: 1;                 /* Antara 是 144/144，行高等於字級 */
+  letter-spacing: -0.02em;
 }
+.hero__display .ln { display: block; }
+.hero__display i  { font-style: normal; }
 
-/* 重點字反白（做法與注意事項見 tokens.css 的 .mark）。
-   沒有螢光色之後，強調靠明度反轉不靠色相 */
-.hero__display em {
-  position: relative;
-  z-index: 0;
-  font-style: normal;
-  color: var(--accent-ink);
-  padding: 0 0.08em;
-}
-.hero__display em::before {
-  content: "";
-  position: absolute;
-  z-index: -1;
-  left: 0;
-  right: 0;
-  top: 0.14em;
-  bottom: 0.2em;
-  background: var(--accent);
-}
+/* 每行各自縮排 —— 這是 Antara「錯落」的全部來源，字間其實是固定的 */
+.ln--a { margin-left: 11%; }
+.ln--b { margin-left: 0; }
+.ln--c { margin-left: 5%; }
 
+/* 靠容器左緣，跟大標同一條線。
+   原本 max-width 與 max-inline-size 兩個限制打架，auto margin 把它推到畫面中間 */
 .hero__lead {
-  /* 中文用 ch 當單位會算成半形寬，實際只有 340px、斷在「最／滿」中間。
-     改用 em 直接綁字級 */
-  max-width: 26em;
+  width: min(100%, var(--container));
+  margin: var(--space-12) auto 0;
+  padding-right: 52%;              /* 用右內距逼它早點換行，不用第二個 max-width */
   font-size: var(--fs-lead);
   line-height: 1.9;
   color: var(--text-secondary);
-  text-wrap: pretty;
 }
+.hero__lead strong { font-weight: var(--fw-bold); color: var(--text-primary); }
 
-.hero__lead strong {
-  font-weight: var(--fw-bold);
-  color: var(--text-primary);
-}
-
-.hero__actions {
+/* 右側的捲動指示：旋轉圓形文字 ＋ 細長箭頭 */
+.hero__scroll {
+  position: absolute;
+  right: var(--gutter);
+  bottom: var(--space-20);
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: var(--space-3);
-  margin-top: var(--space-2);
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
+}
+.hero__scroll-ring {
+  width: 96px;
+  height: 96px;
+  animation: spin 16s linear infinite;
+}
+.hero__scroll-ring text {
+  font-family: var(--font-body);
+  font-size: 8px;
+  letter-spacing: 0.22em;
+  fill: var(--text-secondary);
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.hero__scroll-line {
+  width: 1px;
+  height: 120px;
+  background: linear-gradient(var(--border), transparent);
 }
 
-.hero__note {
+/* ==========================================================================
+   作品列表
+   ========================================================================== */
+
+.works { padding-block: var(--space-20) var(--space-30); }
+
+/* 「精選作品 ————————— PROJECTS」：一條線貫穿、兩端有字 */
+.works-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-6);
+  margin: 0;
+  padding-bottom: var(--space-2);
+  border-bottom: 1px solid var(--text-primary);
+  font-size: var(--fs-sm);
+  letter-spacing: 0.06em;
+}
+
+.works-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.work-item__inner {
+  position: relative;
+  display: grid;
+  grid-template-columns: 284px 1fr;
+  gap: 84px;
+  width: min(100% - var(--gutter) * 2, 1118px);
+  margin-inline: auto;
+  min-height: 490px;
+}
+
+/* 文字欄置中 —— 但只到標題為止。
+   Antara 的文字欄只有「編號＋客戶名＋一句英文標題」，高 195px，置中沒問題；
+   我們多了兩段中文說明，整欄置中會很難讀，所以長段落改回左對齊 */
+.work-content { position: relative; text-align: center; }
+.work-info { width: 284px; margin-inline: auto; }   /* 230 放不下 27px 的中文標題 */
+
+.work-num {
+  display: block;
+  margin-left: 56px;              /* Antara 的編號不跟客戶名切齊，是縮排的 */
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: var(--fs-caption);
+  letter-spacing: 0.1em;
+  color: var(--text-secondary);
+}
+.work-client {
+  margin-top: var(--space-2);
+  font-size: var(--fs-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.work-title {
+  margin-top: var(--space-6);
+  font-family: var(--font-display);
+  font-weight: var(--fw-display);
+  /* Antara 是 27px，但那是給英文的。284px 欄寬 @27px 只放得下 10.5 個中文字，
+     「登入前五頁與雙因素驗證」11 字就會掉一個孤字。降到 25px 剛好 */
+  font-size: 25px;
+  line-height: 1.3;
+}
+.work-what {
+  margin-top: var(--space-6);
   font-size: var(--fs-sm);
   color: var(--text-secondary);
 }
-
-/* 被裁切的幾何色塊當區塊分隔（學 PLAID）。
-   用 --bg-alt 不用 --accent —— 主色留給 CTA 當唯一焦點 */
-.hero__blob {
-  position: absolute;
-  z-index: -1;
-  border-radius: var(--radius-pill);
-  background: var(--bg-alt);
-  pointer-events: none;
+.work-key {
+  margin-top: var(--space-6);
+  padding-top: var(--space-6);
+  border-top: 1px solid var(--border);
+  font-size: var(--fs-sm);
+  text-align: left;
+}
+.work-key b {
+  display: block;
+  margin-bottom: var(--space-2);
+  font-size: var(--fs-caption);
+  letter-spacing: 0.08em;
+  color: var(--text-secondary);
+  font-weight: var(--fw-regular);
 }
 
-.hero__blob--left {
-  width: 44vw;
-  aspect-ratio: 1;
-  top: -14vw;
-  left: -18vw;
+/* 長段落左對齊 */
+.work-what, .work-key { text-align: left; }
+
+/* 圖片：先用白方塊。比例與偏移照 Antara */
+.work-l-img, .work-s-img {
+  display: grid;
+  place-items: center;
+  background: var(--surface);
+  border: 1px solid var(--border);
+}
+.ph { font-size: var(--fs-caption); color: var(--text-secondary); letter-spacing: .08em; }
+
+.work-l-img {
+  aspect-ratio: 867 / 547;
+  margin-top: 216px;              /* 大圖比文字低 216，這是交錯感的來源 */
+  margin-right: -116px;           /* 偏出容器右緣 */
+}
+/* 小圖用一般排版流不用絕對定位 —— Antara 的文字欄高度固定 490，
+   可以寫死 top:359；我們的文字長度會變，寫死就會壓到「一個關鍵決策」那段 */
+.work-s-img {
+  width: 247px;
+  aspect-ratio: 247 / 261;
+  margin-top: var(--space-12);
+  margin-left: -108px;            /* 偏出容器左緣，維持 Antara 的偏移量 */
 }
 
-.hero__blob--right {
-  width: 30vw;
-  aspect-ratio: 1;
-  right: -12vw;
-  bottom: -14vw;
-}
+/* 交錯：整組左右鏡像 */
+.work-item.-reversed .work-item__inner { grid-template-columns: 1fr 284px; }
+.work-item.-reversed .work-content { order: 2; }
+.work-item.-reversed .work-l-img { margin-right: 0; margin-left: -116px; }
+.work-item.-reversed .work-s-img { margin-left: auto; margin-right: -108px; }
+
+/* 項目間距 590 −  item 高 490 = 100 */
+.work-item + .work-item { margin-top: 100px; }
 
 /* ==========================================================================
    Footer
@@ -227,20 +295,9 @@
    進場動效（prefers-reduced-motion 的關閉條件寫在 tokens.css）
    ========================================================================== */
 
-/* 關掉動效時標籤不跑物理，就不能再用絕對定位貼在底部 ——
-   那樣它會疊到說明文字上（手機尤其明顯）。改回正常排版流，排在文案下面 */
+/* 關掉動效時捲動指示的旋轉要停 */
 @media (prefers-reduced-motion: reduce) {
-  .hero {
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: var(--space-12);
-  }
-
-  .hero__tags {
-    position: static;
-    padding-inline: var(--gutter);
-  }
+  .hero__scroll-ring { animation: none; }
 }
 
 @keyframes rise {
@@ -248,14 +305,15 @@
   to   { opacity: 1; transform: none; }
 }
 
-.hero__inner > * {
-  animation: rise 0.6s var(--ease) backwards;
+/* hero 進場：大標一行一行上來 */
+.hero__display .ln,
+.hero__lead {
+  animation: rise 0.9s var(--ease) backwards;
 }
-
-.hero__inner > *:nth-child(1) { animation-delay: 0.00s; }
-.hero__inner > *:nth-child(2) { animation-delay: 0.06s; }
-.hero__inner > *:nth-child(3) { animation-delay: 0.12s; }
-.hero__inner > *:nth-child(4) { animation-delay: 0.18s; }
+.hero__display .ln:nth-child(1) { animation-delay: 0.05s; }
+.hero__display .ln:nth-child(2) { animation-delay: 0.15s; }
+.hero__display .ln:nth-child(3) { animation-delay: 0.25s; }
+.hero__lead { animation-delay: 0.4s; }
 
 /* ==========================================================================
    RWD —— 桌機優先，但手機版必須做（客戶大量從 Threads 手機點進來）
@@ -272,8 +330,6 @@
     /* 不改成 auto —— 膠囊需要一個明確的高度才有地板可落 */
     padding-block: calc(var(--space-30) + var(--space-4)) var(--space-20);
   }
-
-  .hero__tags { bottom: var(--space-6); }
 
   .hero__display {
     max-width: 100%;
@@ -463,196 +519,46 @@
 .fineprint { margin-top: var(--space-6); font-size: var(--fs-caption); color: var(--text-secondary); }
 
 /* ==========================================================================
-   ④ 案例 —— 三件三種版型
-
-   之所以不做「左右交替」：交替本身不是問題，三件用同一個模板才是。
-   Antara 的錯落其實也很規律（圖片只在三種尺寸間循環），
-   所以這裡改成每一件有自己的版型，間距也刻意不等。
+   作品的動態 —— 進場、視差、hover
    ========================================================================== */
 
-.works {
-  margin: var(--space-20) 0 0;
-  padding: 0;
-  list-style: none;
-}
-
-/* 間距刻意不等 —— 平均分配就會回到模板感 */
-.work + .work { margin-top: 200px; }
-.work--pair    { margin-top: 240px !important; }
-
-.work__media {
-  position: relative;
-  display: grid;
-  place-items: center;
-  background: var(--bg-alt);
-  border: 1px solid var(--border);
-  overflow: hidden;
-}
-.work__ph {
-  font-size: var(--fs-caption);
-  color: var(--text-secondary);
-  letter-spacing: .08em;
-}
-
-/* 編號：Instrument Serif 的斜體，Antara 的 01-018 格式（這裡只有三件） */
-.work__index {
-  font-family: var(--font-display);
-  font-style: italic;
-  font-size: var(--fs-h3);
-  letter-spacing: 0.04em;
-  color: var(--text-secondary);
-}
-
-.work__meta {
-  display: flex;
-  align-items: center;
-  gap: var(--space-3);
-  margin-bottom: var(--space-6);
-  font-size: var(--fs-caption);
-  color: var(--text-secondary);
-}
-.work__meta .pill { align-self: flex-start; }
-
-.work__title {
-  font-family: var(--font-display);
-  font-size: clamp(2rem, 4.4vw, 3.5rem);
-  font-weight: var(--fw-display);
-  line-height: 1.05;
-  letter-spacing: -0.03em;
-  margin-bottom: var(--space-4);
-}
-/* 02 的標題刻意大到接近爆框 */
-.work__title--xl { font-size: clamp(2.5rem, 6vw, 6rem); }
-
-.work__what { font-size: var(--fs-sm); color: var(--text-secondary); max-width: 24em; }
-.work__key {
-  margin-top: var(--space-6);
-  padding-top: var(--space-6);
-  border-top: 1px solid var(--border);
-  font-size: var(--fs-sm);
-  max-width: 24em;
-}
-.work__key b {
-  display: block;
-  margin-bottom: var(--space-2);
-  font-size: var(--fs-caption);
-  letter-spacing: 0.08em;
-  color: var(--text-secondary);
-  font-weight: var(--fw-regular);
-}
-
-/* ---------- 01：滿版出血 ---------- */
-
-.work__media--bleed {
-  width: 100vw;
-  margin-left: calc(50% - 50vw);   /* 出血到視窗邊緣，不受 container 限制 */
-  height: 70vh;
-  border-inline: 0;
-  margin-bottom: var(--space-12);
-}
-/* 編號要跟下方的 container 左緣對齊 ——
-   出血圖是 100vw，直接用 left:40px 會貼到視窗邊，跟文字差 120px */
-.work__media--bleed .work__index {
-  position: absolute;
-  left: 50%;
-  bottom: var(--space-6);
-  width: min(100%, var(--container));
-  padding-inline: var(--gutter);   /* container 自己有內距，這裡要補上才對得齊 */
-  transform: translateX(-50%);
-}
-
-/* 文字靠左，右邊刻意大留白。
-   52% 不是 40% —— 40% 只有 480px，標題 56px 時「8 種角色的權限管理」
-   會斷成兩行、最後一個字變孤字 */
-.work--bleed .work__body { max-width: 52%; }
-.work--bleed .work__what,
-.work--bleed .work__key { max-width: 24em; }
-
-/* ---------- 02：大標題吃左邊，小圖偏右下 ---------- */
-
-.work--offset .work__grid {
-  display: grid;
-  grid-template-columns: 2fr 1fr;
-  gap: var(--space-12);
-  align-items: start;
-}
-.work--offset .work__index { display: block; margin-bottom: var(--space-4); }
-.work__media--square {
-  aspect-ratio: 1;
-  transform: translateY(120px);    /* 刻意不跟標題對齊 */
-}
-
-/* ---------- 03：大小雙圖錯落 ---------- */
-
-.work--pair .work__grid {
-  display: grid;
-  grid-template-columns: 1.15fr 1fr;
-  gap: var(--space-12);
-  align-items: start;
-}
-.work__stack { position: relative; }
-.work__media--wide { aspect-ratio: 1.6 / 1; }
-.work__media--small {
-  position: absolute;
-  right: -80px;                    /* 偏出容器 */
-  bottom: -80px;
-  width: 46%;
-  aspect-ratio: 1;
-  background: var(--surface);
-}
-/* 文字往下讓開小圖，並且跟大圖頂端不對齊 */
-.work--pair .work__body { padding-top: var(--space-20); }
-
-/* ==========================================================================
-   案例的動態
-   進場、視差由 reveal.js 掛 class 與寫 CSS 變數；這裡只定義樣式
-   ========================================================================== */
-
-/* 進場：圖片與文字各自淡入＋上移，靠 --d 錯開時間。
-
-   ⚠️ 隱藏狀態一定要綁在 .js-reveal（由 reveal.js 加在 <html> 上）。
-   直接寫 opacity:0 的話，JS 沒載到或使用者關掉動效時，整個案例區會永遠是空白 */
-.js-reveal [data-reveal] .work__media,
-.js-reveal [data-reveal] .work__body > * {
+/* 隱藏狀態綁在 .js-reveal（reveal.js 加在 <html> 上）。
+   直接寫 opacity:0 的話，JS 沒載到就會變成永久空白 */
+.js-reveal [data-reveal] .work-l-img,
+.js-reveal [data-reveal] .work-s-img,
+.js-reveal [data-reveal] .work-info > * {
   opacity: 0;
   transform: translateY(40px);
 }
-.js-reveal [data-reveal].is-in .work__media,
-.js-reveal [data-reveal].is-in .work__body > * {
+.js-reveal [data-reveal].is-in .work-l-img,
+.js-reveal [data-reveal].is-in .work-s-img,
+.js-reveal [data-reveal].is-in .work-info > * {
   opacity: 1;
   transform: none;
   transition:
     opacity 0.9s var(--ease) var(--d, 0s),
     transform 0.9s var(--ease) var(--d, 0s);
 }
-/* 02 的小圖本來就有位移，進場後要回到它的偏移位置而不是 0 */
-.js-reveal [data-reveal].is-in .work__media--square { transform: translateY(120px); }
 
-[data-reveal] .work__body > *:nth-child(1) { --d: 0.08s; }
-[data-reveal] .work__body > *:nth-child(2) { --d: 0.16s; }
-[data-reveal] .work__body > *:nth-child(3) { --d: 0.24s; }
-[data-reveal] .work__body > *:nth-child(4) { --d: 0.32s; }
-[data-reveal] .work__body > *:nth-child(5) { --d: 0.40s; }
+[data-reveal] .work-info > *:nth-child(1) { --d: 0.06s; }
+[data-reveal] .work-info > *:nth-child(2) { --d: 0.12s; }
+[data-reveal] .work-info > *:nth-child(3) { --d: 0.18s; }
+[data-reveal] .work-info > *:nth-child(4) { --d: 0.24s; }
+[data-reveal] .work-info > *:nth-child(5) { --d: 0.30s; }
 
-/* 視差：JS 餵 --py。移動的是圖片「內容」不是容器 ——
-   容器要留給 hover 的 scale 和 02 那張圖的 translateY(120px) 用。
-   圖片先放大 1.12 倍，位移時邊緣才不會露出底色 */
-.work__media[data-parallax] > img {
+/* 視差：移動圖片內容不移動容器，容器要留給 hover 的 scale */
+[data-parallax] > img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   transform: translateY(var(--py, 0px)) scale(1.12);
   will-change: transform;
 }
-.work__media[data-parallax] > .work__ph { transform: translateY(var(--py, 0px)); }
+[data-parallax] > .ph { transform: translateY(var(--py, 0px)); }
 
-/* hover：圖片放大。用 scale 不用改寬高，才不會觸發重新排版 */
-.work__media {
-  transition: transform 0.6s var(--ease);
-}
+.work-l-img, .work-s-img { transition: transform 0.6s var(--ease); }
 @media (hover: hover) {
-  .work__media:hover { transform: scale(1.02); }
-  .work--offset .work__media--square:hover { transform: translateY(120px) scale(1.02); }
+  .work-l-img:hover, .work-s-img:hover { transform: scale(1.02); }
 }
 
 /* ==========================================================================
@@ -722,26 +628,36 @@
   .section { padding-block: var(--space-20); }
   .section__title { max-width: 100%; }
   .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; margin-top: var(--space-8); }
-  .works { margin-top: var(--space-12); }
-  .work + .work,
-  .work--pair { margin-top: var(--space-20) !important; }
+  .sub { margin-top: var(--space-12); }
+  .addons { grid-template-columns: 1fr; }
 
-  .work--offset .work__grid,
-  .work--pair .work__grid { grid-template-columns: 1fr; gap: var(--space-8); }
-
-  /* 出血圖在手機上壓低一點，不要吃掉整個畫面 */
-  .work__media--bleed { height: 46vh; margin-bottom: var(--space-8); }
-  .work--bleed .work__body { max-width: 100%; }
-
-  /* 偏移與疊圖在單欄下會打架，取消 */
-  .work__media--square { transform: none; }
-  .work__media--small {
-    position: static;
-    width: 60%;
-    margin-top: var(--space-4);
+  /* 作品：單欄。偏移與交錯在窄螢幕會打架，全部取消 */
+  .work-item__inner {
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+    min-height: 0;
+    width: 100%;
+    padding-inline: var(--gutter);
   }
-  .work--pair .work__body { padding-top: 0; }
-  .work__title--xl { font-size: clamp(2rem, 9vw, 3rem); }
+  .work-item.-reversed .work-item__inner { grid-template-columns: 1fr; }
+  .work-item.-reversed .work-content { order: 0; }
+  .work-l-img { margin: 0 !important; }
+  /* 交錯版的 .work-item.-reversed .work-s-img 優先級比這裡高，
+     不寫死就會留著 margin-right:-108px 撐出橫向捲動 */
+  .work-s-img,
+  .work-item.-reversed .work-s-img {
+    width: 60%;
+    margin: var(--space-4) auto 0;
+  }
+  .work-item + .work-item { margin-top: var(--space-20); }
+  .work-num { margin-left: 0; }
+  .work-info { width: 100%; }
+
+  .nav, .btn-oval { display: none; }
+  .hero__scroll { display: none; }
+  .hero__lead { padding-right: 0; }
+  .ln--a, .ln--c { margin-left: 0; }
+}
   .steps { margin-top: var(--space-12); }
   .step { grid-template-columns: 1fr; gap: var(--space-3); }
   .sub { margin-top: var(--space-12); }
