@@ -355,6 +355,73 @@
 }
 
 /* ==========================================================================
+   服務卡 —— 三張並排，淡色圓角底
+   ========================================================================== */
+
+.services-cards { padding-block: 0 var(--space-20); }
+
+.scards {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-6);
+}
+
+.scard {
+  border-radius: var(--radius-lg);
+  transition: transform var(--duration) var(--ease), box-shadow var(--duration) var(--ease);
+}
+.scard--mint   { background: var(--tint-mint); }
+.scard--blue   { background: var(--tint-blue); }
+.scard--yellow { background: var(--tint-yellow); }
+
+/* 整張卡都可以點，不是只有那個箭頭 */
+.scard__link {
+  position: relative;
+  display: block;
+  height: 100%;
+  padding: var(--space-8);
+  border-radius: inherit;
+}
+.scard__link:focus-visible { outline: 2px solid var(--accent-deep); outline-offset: 3px; }
+
+/* 左上角的圓角方形 icon 底 */
+.scard__icon {
+  display: grid;
+  place-items: center;
+  width: 48px; height: 48px;
+  margin-bottom: var(--space-6);
+  border-radius: 14px;
+  background: var(--surface);
+  color: var(--accent-deep);
+}
+.scard__icon svg { width: 24px; height: 24px; }
+
+/* 右上角箭頭 */
+.scard__arrow {
+  position: absolute;
+  top: var(--space-8);
+  right: var(--space-8);
+  display: grid;
+  place-items: center;
+  width: 28px; height: 28px;
+  color: var(--accent-deep);
+  transition: transform var(--duration) var(--ease);
+}
+.scard__arrow svg { width: 18px; height: 18px; }
+
+.scard__title {
+  margin-bottom: var(--space-2);
+  font-size: var(--fs-h3);
+  font-weight: var(--fw-bold);
+}
+.scard__desc { font-size: var(--fs-sm); color: var(--text-secondary); }
+
+@media (hover: hover) {
+  .scard:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); }
+  .scard:hover .scard__arrow { transform: translate(3px, -3px); }
+}
+
+/* ==========================================================================
    ② 我能解決什麼 —— 三張淡色圓角卡
    ========================================================================== */
 
@@ -623,6 +690,8 @@
   .panel { padding: var(--space-12) var(--space-6); border-radius: var(--radius-lg); }
 
   .tint-cards, .plans, .steps { grid-template-columns: 1fr; margin-top: var(--space-8); }
+  .scards { grid-template-columns: 1fr; }
+  .services-cards { padding-bottom: var(--space-12); }
   .addons { grid-template-columns: 1fr; }
 
   .work { grid-template-columns: 1fr; gap: var(--space-6); padding: var(--space-6); border-radius: var(--radius-lg); }
