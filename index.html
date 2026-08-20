@@ -41,6 +41,10 @@
     <!-- ① HERO —— 照 Antara：每一行有自己的縮排，字間固定 36px。
          沒有置中大標＋兩顆按鈕，只有大標與捲動指示 -->
     <section class="hero">
+      <!-- 背景光暈。Antara 是用 canvas 即時算的網格漸層，
+           這裡用兩團 radial-gradient 加模糊，效果接近但成本是 0 KB -->
+      <div class="hero__glow" aria-hidden="true"></div>
+
       <h1 class="hero__display">
         <span class="ln ln--a"><i>Design,</i></span>
         <span class="ln ln--b"><i>not</i></span>

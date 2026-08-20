@@ -79,7 +79,29 @@
   overflow: hidden;
 }
 
+/* ---------- 背景光暈 ----------
+   兩團色斑：左上偏冷的灰、右下暖金。
+   靠 blur 把邊緣化掉，所以不會有「漸層條紋」那種廉價感。
+   ⚠️ 這是規格硬規則第 3 條「零漸層」的唯一破例，Alvie 2026-08-20 指定 */
+.hero__glow {
+  position: absolute;
+  /* 往外拉很多：blur(90px) 碰到 overflow:hidden 的邊會切出一條硬界線，
+     色斑中心必須離邊界夠遠才不會露出來 */
+  inset: -30% -20%;
+  z-index: -1;
+  pointer-events: none;
+  filter: blur(80px);
+  background:
+    /* 左上偏冷的灰煙 —— 要夠濃才看得出來 */
+    radial-gradient(26% 30% at 34% 30%, rgba(78, 72, 64, 0.50) 0%, rgba(78, 72, 64, 0) 68%),
+    /* 右下暖金主團 —— 收小，周圍要留乾淨的底 */
+    radial-gradient(30% 32% at 58% 66%, rgba(198, 160, 84, 0.60) 0%, rgba(198, 160, 84, 0) 70%),
+    /* 一小團補在右側，讓金色不要是完美的圓 */
+    radial-gradient(18% 22% at 74% 54%, rgba(216, 188, 126, 0.42) 0%, rgba(216, 188, 126, 0) 72%);
+}
+
 .hero__display {
+  position: relative;   /* 疊在光暈上面 */
   display: flex;
   flex-direction: column;
   width: 100%;
