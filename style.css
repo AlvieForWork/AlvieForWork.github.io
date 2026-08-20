@@ -463,40 +463,45 @@
 .fineprint { margin-top: var(--space-6); font-size: var(--fs-caption); color: var(--text-secondary); }
 
 /* ==========================================================================
-   ④ 案例 —— 一列一個、左右交錯（Antara 的 work-item / -reversed）
+   ④ 案例 —— 三件三種版型
+
+   之所以不做「左右交替」：交替本身不是問題，三件用同一個模板才是。
+   Antara 的錯落其實也很規律（圖片只在三種尺寸間循環），
+   所以這裡改成每一件有自己的版型，間距也刻意不等。
    ========================================================================== */
 
 .works {
   margin: var(--space-20) 0 0;
   padding: 0;
   list-style: none;
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-30);
 }
 
-.work {
-  display: grid;
-  grid-template-columns: 1.35fr 1fr;
-  gap: var(--space-12);
-  align-items: center;
-  width: min(100% - var(--gutter) * 2, 1240px);
-  margin-inline: auto;
-}
+/* 間距刻意不等 —— 平均分配就會回到模板感 */
+.work + .work { margin-top: 200px; }
+.work--pair    { margin-top: 240px !important; }
 
-/* 交錯：偶數列圖片換到右邊。單純換 order，不重寫版型 */
-.work--reversed .work__media { order: 2; }
-
-/* 佔位底色要跟區塊底分得開 —— 兩個都用 --bg-alt 的話整塊會隱形 */
 .work__media {
-  aspect-ratio: 1.6 / 1;          /* Antara 的大圖是 1.54–1.64 */
+  position: relative;
   display: grid;
   place-items: center;
   background: var(--bg-alt);
   border: 1px solid var(--border);
-  border-radius: var(--radius-none);
+  overflow: hidden;
 }
-.work__ph { font-size: var(--fs-caption); color: var(--text-secondary); letter-spacing: .08em; }
+.work__ph {
+  font-size: var(--fs-caption);
+  color: var(--text-secondary);
+  letter-spacing: .08em;
+}
+
+/* 編號：Instrument Serif 的斜體，Antara 的 01-018 格式（這裡只有三件） */
+.work__index {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: var(--fs-h3);
+  letter-spacing: 0.04em;
+  color: var(--text-secondary);
+}
 
 .work__meta {
   display: flex;
@@ -506,14 +511,19 @@
   font-size: var(--fs-caption);
   color: var(--text-secondary);
 }
+.work__meta .pill { align-self: flex-start; }
+
 .work__title {
   font-family: var(--font-display);
-  font-size: clamp(28px, 3.2vw, 44px);
+  font-size: clamp(2rem, 4.4vw, 3.5rem);
   font-weight: var(--fw-display);
-  line-height: 1.1;
+  line-height: 1.05;
   letter-spacing: -0.03em;
   margin-bottom: var(--space-4);
 }
+/* 02 的標題刻意大到接近爆框 */
+.work__title--xl { font-size: clamp(2.5rem, 6vw, 6rem); }
+
 .work__what { font-size: var(--fs-sm); color: var(--text-secondary); max-width: 24em; }
 .work__key {
   margin-top: var(--space-6);
@@ -529,6 +539,120 @@
   letter-spacing: 0.08em;
   color: var(--text-secondary);
   font-weight: var(--fw-regular);
+}
+
+/* ---------- 01：滿版出血 ---------- */
+
+.work__media--bleed {
+  width: 100vw;
+  margin-left: calc(50% - 50vw);   /* 出血到視窗邊緣，不受 container 限制 */
+  height: 70vh;
+  border-inline: 0;
+  margin-bottom: var(--space-12);
+}
+/* 編號要跟下方的 container 左緣對齊 ——
+   出血圖是 100vw，直接用 left:40px 會貼到視窗邊，跟文字差 120px */
+.work__media--bleed .work__index {
+  position: absolute;
+  left: 50%;
+  bottom: var(--space-6);
+  width: min(100%, var(--container));
+  padding-inline: var(--gutter);   /* container 自己有內距，這裡要補上才對得齊 */
+  transform: translateX(-50%);
+}
+
+/* 文字靠左，右邊刻意大留白。
+   52% 不是 40% —— 40% 只有 480px，標題 56px 時「8 種角色的權限管理」
+   會斷成兩行、最後一個字變孤字 */
+.work--bleed .work__body { max-width: 52%; }
+.work--bleed .work__what,
+.work--bleed .work__key { max-width: 24em; }
+
+/* ---------- 02：大標題吃左邊，小圖偏右下 ---------- */
+
+.work--offset .work__grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: var(--space-12);
+  align-items: start;
+}
+.work--offset .work__index { display: block; margin-bottom: var(--space-4); }
+.work__media--square {
+  aspect-ratio: 1;
+  transform: translateY(120px);    /* 刻意不跟標題對齊 */
+}
+
+/* ---------- 03：大小雙圖錯落 ---------- */
+
+.work--pair .work__grid {
+  display: grid;
+  grid-template-columns: 1.15fr 1fr;
+  gap: var(--space-12);
+  align-items: start;
+}
+.work__stack { position: relative; }
+.work__media--wide { aspect-ratio: 1.6 / 1; }
+.work__media--small {
+  position: absolute;
+  right: -80px;                    /* 偏出容器 */
+  bottom: -80px;
+  width: 46%;
+  aspect-ratio: 1;
+  background: var(--surface);
+}
+/* 文字往下讓開小圖，並且跟大圖頂端不對齊 */
+.work--pair .work__body { padding-top: var(--space-20); }
+
+/* ==========================================================================
+   案例的動態
+   進場、視差由 reveal.js 掛 class 與寫 CSS 變數；這裡只定義樣式
+   ========================================================================== */
+
+/* 進場：圖片與文字各自淡入＋上移，靠 --d 錯開時間。
+
+   ⚠️ 隱藏狀態一定要綁在 .js-reveal（由 reveal.js 加在 <html> 上）。
+   直接寫 opacity:0 的話，JS 沒載到或使用者關掉動效時，整個案例區會永遠是空白 */
+.js-reveal [data-reveal] .work__media,
+.js-reveal [data-reveal] .work__body > * {
+  opacity: 0;
+  transform: translateY(40px);
+}
+.js-reveal [data-reveal].is-in .work__media,
+.js-reveal [data-reveal].is-in .work__body > * {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity 0.9s var(--ease) var(--d, 0s),
+    transform 0.9s var(--ease) var(--d, 0s);
+}
+/* 02 的小圖本來就有位移，進場後要回到它的偏移位置而不是 0 */
+.js-reveal [data-reveal].is-in .work__media--square { transform: translateY(120px); }
+
+[data-reveal] .work__body > *:nth-child(1) { --d: 0.08s; }
+[data-reveal] .work__body > *:nth-child(2) { --d: 0.16s; }
+[data-reveal] .work__body > *:nth-child(3) { --d: 0.24s; }
+[data-reveal] .work__body > *:nth-child(4) { --d: 0.32s; }
+[data-reveal] .work__body > *:nth-child(5) { --d: 0.40s; }
+
+/* 視差：JS 餵 --py。移動的是圖片「內容」不是容器 ——
+   容器要留給 hover 的 scale 和 02 那張圖的 translateY(120px) 用。
+   圖片先放大 1.12 倍，位移時邊緣才不會露出底色 */
+.work__media[data-parallax] > img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: translateY(var(--py, 0px)) scale(1.12);
+  will-change: transform;
+}
+.work__media[data-parallax] > .work__ph { transform: translateY(var(--py, 0px)); }
+
+/* hover：圖片放大。用 scale 不用改寬高，才不會觸發重新排版 */
+.work__media {
+  transition: transform 0.6s var(--ease);
+}
+@media (hover: hover) {
+  .work__media:hover { transform: scale(1.02); }
+  .work--offset .work__media--square:hover { transform: translateY(120px) scale(1.02); }
 }
 
 /* ==========================================================================
@@ -598,9 +722,26 @@
   .section { padding-block: var(--space-20); }
   .section__title { max-width: 100%; }
   .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; margin-top: var(--space-8); }
-  .works { gap: var(--space-20); margin-top: var(--space-12); }
-  .work { grid-template-columns: 1fr; gap: var(--space-6); }
-  .work--reversed .work__media { order: 0; }   /* 手機上不交錯，一律圖在上 */
+  .works { margin-top: var(--space-12); }
+  .work + .work,
+  .work--pair { margin-top: var(--space-20) !important; }
+
+  .work--offset .work__grid,
+  .work--pair .work__grid { grid-template-columns: 1fr; gap: var(--space-8); }
+
+  /* 出血圖在手機上壓低一點，不要吃掉整個畫面 */
+  .work__media--bleed { height: 46vh; margin-bottom: var(--space-8); }
+  .work--bleed .work__body { max-width: 100%; }
+
+  /* 偏移與疊圖在單欄下會打架，取消 */
+  .work__media--square { transform: none; }
+  .work__media--small {
+    position: static;
+    width: 60%;
+    margin-top: var(--space-4);
+  }
+  .work--pair .work__body { padding-top: 0; }
+  .work__title--xl { font-size: clamp(2rem, 9vw, 3rem); }
   .steps { margin-top: var(--space-12); }
   .step { grid-template-columns: 1fr; gap: var(--space-3); }
   .sub { margin-top: var(--space-12); }

@@ -143,8 +143,8 @@
       </div>
     </section>
 
-    <!-- ④ 案例 —— 一列一個、左右交錯（照 Antara 的 work-item / -reversed）
-         這是全頁最長的區塊，刻意的：節奏平均就是模板感 -->
+    <!-- ④ 案例 —— 三件三種版型，不是同一個模板交替。
+         文案內容未改動，只換排版與加動態 -->
     <section class="section" id="cases">
       <div class="container">
         <p class="eyebrow">案例</p>
@@ -152,35 +152,60 @@
       </div>
 
       <ol class="works">
-        <li class="work">
-          <div class="work__media"><span class="work__ph">畫面截圖待補</span></div>
-          <div class="work__body">
-            <p class="work__meta"><span class="pill">企業後台</span><span>2026</span></p>
-            <h3 class="work__title">8 種角色的權限管理</h3>
-            <p class="work__what">子帳號、部門、操作紀錄、批次匯入四個模組，從資訊架構盤點做到可點擊的原型。</p>
-            <p class="work__key"><b>一個關鍵決策</b>模擬身份不做進帳號卡的標籤，改成獨立的浮動列。因為「我現在是誰」和「我的帳號是誰」是兩件事，混在一起使用者會誤判自己有沒有權限。</p>
+
+        <!-- 01：滿版出血大圖，文字靠左佔 40%，右邊大留白 -->
+        <li class="work work--bleed" data-reveal>
+          <figure class="work__media work__media--bleed" data-parallax>
+            <span class="work__ph">畫面截圖待補</span>
+            <span class="work__index">01–003</span>
+          </figure>
+          <div class="container">
+            <div class="work__body">
+              <p class="work__meta"><span class="pill">企業後台</span><span>2026</span></p>
+              <h3 class="work__title">8 種角色的權限管理</h3>
+              <p class="work__what">子帳號、部門、操作紀錄、批次匯入四個模組，從資訊架構盤點做到可點擊的原型。</p>
+              <p class="work__key"><b>一個關鍵決策</b>模擬身份不做進帳號卡的標籤，改成獨立的浮動列。因為「我現在是誰」和「我的帳號是誰」是兩件事，混在一起使用者會誤判自己有沒有權限。</p>
+            </div>
           </div>
         </li>
 
-        <li class="work work--reversed">
-          <div class="work__media"><span class="work__ph">畫面截圖待補</span></div>
-          <div class="work__body">
-            <p class="work__meta"><span class="pill">登入與帳號安全</span><span>2026</span></p>
-            <h3 class="work__title">登入前五頁與雙因素驗證</h3>
-            <p class="work__what">登入、2FA 綁定、忘記密碼、鎖定、解鎖，五頁共用一份 token 檔與一套版型規範。</p>
-            <p class="work__key"><b>一個關鍵決策</b>密碼鎖與驗證碼鎖是兩個獨立的永久鎖，都只能由客服解。自動解鎖等於給暴力破解無限次機會，而兩種鎖混用會讓客服查不出使用者到底卡在哪。</p>
+        <!-- 02：超大標題吃掉左邊 2/3，小圖偏右下、刻意不對齊 -->
+        <li class="work work--offset" data-reveal>
+          <div class="container work__grid">
+            <div class="work__body">
+              <p class="work__index">02–003</p>
+              <p class="work__meta"><span class="pill">登入與帳號安全</span><span>2026</span></p>
+              <h3 class="work__title work__title--xl">登入前五頁與雙因素驗證</h3>
+              <p class="work__what">登入、2FA 綁定、忘記密碼、鎖定、解鎖，五頁共用一份 token 檔與一套版型規範。</p>
+              <p class="work__key"><b>一個關鍵決策</b>密碼鎖與驗證碼鎖是兩個獨立的永久鎖，都只能由客服解。自動解鎖等於給暴力破解無限次機會，而兩種鎖混用會讓客服查不出使用者到底卡在哪。</p>
+            </div>
+            <figure class="work__media work__media--square" data-parallax>
+              <span class="work__ph">畫面截圖待補</span>
+            </figure>
           </div>
         </li>
 
-        <li class="work">
-          <div class="work__media"><span class="work__ph">畫面截圖待補</span></div>
-          <div class="work__body">
-            <p class="work__meta"><span class="pill">自己的產品</span><span>2026</span></p>
-            <h3 class="work__title">選股條件篩選工具</h3>
-            <p class="work__what">從想法到上線的完整流程：規格、介面、前後端、部署，一個人用 AI 協作完成。</p>
-            <p class="work__key"><b>一個關鍵決策</b>把判斷條件攤開讓使用者自己調，不做「推薦清單」。工具給的是理由，不是答案 —— 一旦給答案就要為結果負責，那是另一種生意。</p>
+        <!-- 03：大小雙圖錯落，小圖疊在大圖右下並偏出容器 -->
+        <li class="work work--pair" data-reveal>
+          <div class="container work__grid">
+            <div class="work__stack">
+              <figure class="work__media work__media--wide" data-parallax>
+                <span class="work__ph">畫面截圖待補</span>
+              </figure>
+              <figure class="work__media work__media--small" data-parallax>
+                <span class="work__ph">細節圖待補</span>
+              </figure>
+            </div>
+            <div class="work__body">
+              <p class="work__index">03–003</p>
+              <p class="work__meta"><span class="pill">自己的產品</span><span>2026</span></p>
+              <h3 class="work__title">選股條件篩選工具</h3>
+              <p class="work__what">從想法到上線的完整流程：規格、介面、前後端、部署，一個人用 AI 協作完成。</p>
+              <p class="work__key"><b>一個關鍵決策</b>把判斷條件攤開讓使用者自己調，不做「推薦清單」。工具給的是理由，不是答案 —— 一旦給答案就要為結果負責，那是另一種生意。</p>
+            </div>
           </div>
         </li>
+
       </ol>
     </section>
 
