@@ -120,22 +120,23 @@
   text-wrap: balance;
 }
 
-/* 重點字用螢光筆底線，不換字色（做法見 tokens.css 的 .mark） */
-.hero__display { position: relative; z-index: 0; }
+/* 重點字反白（做法與注意事項見 tokens.css 的 .mark）。
+   沒有螢光色之後，強調靠明度反轉不靠色相 */
 .hero__display em {
   position: relative;
   z-index: 0;
   font-style: normal;
-  color: inherit;
+  color: var(--accent-ink);
+  padding: 0 0.08em;
 }
-.hero__display em::after {
+.hero__display em::before {
   content: "";
   position: absolute;
   z-index: -1;
-  left: -0.05em;
-  right: -0.05em;
-  bottom: 0.16em;   /* 壓到字母底部，不是浮在字下面 */
-  height: 0.14em;
+  left: 0;
+  right: 0;
+  top: 0.14em;
+  bottom: 0.2em;
   background: var(--accent);
 }
 
@@ -330,21 +331,26 @@
   text-wrap: balance;
 }
 
-/* 淺底上綠色只能墊在字底下；深底上 14.1:1，可以直接當字色 */
-.section__title { position: relative; z-index: 0; }
-.section__title em { position: relative; z-index: 0; font-style: normal; }
-.section__title em::after {
+/* 淺底上反白（黑底米白字）；深底上反過來 —— 米白底黑字 */
+.section__title em {
+  position: relative;
+  z-index: 0;
+  font-style: normal;
+  color: var(--accent-ink);
+  padding: 0 0.08em;
+}
+.section__title em::before {
   content: "";
   position: absolute;
   z-index: -1;
-  left: -0.05em;
-  right: -0.05em;
+  left: 0;
+  right: 0;
+  top: 0.08em;
   bottom: 0.12em;
-  height: 0.14em;
   background: var(--accent);
 }
-.section--dark .section__title em { color: var(--accent); }
-.section--dark .section__title em::after { display: none; }
+.section--dark .section__title em { color: var(--ink); }
+.section--dark .section__title em::before { background: var(--ink-text); }
 
 .section__lead {
   max-width: 26em;
@@ -370,13 +376,16 @@
   border-radius: var(--radius-none);
   background: var(--ink-surface);
 }
-.dcard__num {
+/* ⚠️ 選擇器要比 .dcard p 更具體。
+   編號是 <p>，而下面的 .dcard p 優先級較高，會把字級壓成 14px。
+   襯線體在 14px 又是深色底時，細筆畫會被抗鋸齒吃光（實測最亮只剩 #988F85）*/
+.dcard .dcard__num {
   margin-bottom: var(--space-4);
   font-family: var(--font-display);
-  font-size: 40px;
+  font-size: 64px;
   font-weight: var(--fw-display);
   line-height: 1;
-  color: var(--accent);
+  color: var(--ink-text);
 }
 .dcard h3 { margin-bottom: var(--space-2); font-size: var(--fs-h3); font-weight: var(--fw-bold); }
 .dcard p  { font-size: var(--fs-sm); color: var(--ink-text-secondary); }
@@ -535,7 +544,7 @@
 
 .step {
   display: grid;
-  grid-template-columns: 96px 1fr;
+  grid-template-columns: 120px 1fr;
   gap: var(--space-8);
   padding-block: var(--space-8);
   border-top: 1px solid var(--ink-border);
@@ -544,10 +553,10 @@
 
 .step__num {
   font-family: var(--font-display);
-  font-size: 40px;
+  font-size: 64px;
   font-weight: var(--fw-display);
   line-height: 1;
-  color: var(--accent);
+  color: var(--ink-text);
 }
 .step__body h3 { margin-bottom: var(--space-2); font-size: var(--fs-h3); font-weight: var(--fw-bold); }
 .step__body p  { font-size: var(--fs-sm); color: var(--ink-text-secondary); max-width: 28em; }
