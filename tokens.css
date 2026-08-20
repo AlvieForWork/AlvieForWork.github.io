@@ -1,87 +1,59 @@
 /* ==========================================================================
    tokens.css — 設計 token 單一來源
-   來源：作品集/接案網站-設計規格.md（2026-08-19 定案）
+   風格：GEPPY STUDiO（mindfree.jp/geppy）— 柔和、活潑、親切的日系 SaaS
+   主色：TWICE Mina 的應援色薄荷 #6FC5C2
 
-   硬規則（改任何東西之前先看這四條）：
-   1. 介面沒有彩色。顏色只能從作品截圖裡來，不做成 token
-   2. 零 box-shadow —— 用暖米白底 + 白卡 + 圓角分層
-   3. 零漸層、零玻璃擬態 —— 這是「AI 味」的核心特徵
-   4. 中性色全部偏暖，不用純白純黑
-   5. --accent 現在是暖黑，疊在它上面的字用 --accent-ink（暖米白）
-   6. 要顏色的話補作品截圖，不要加色票
-
-   目標分布（Antara 實測像素比對，2026-08-20）：
-     暖米白主底 ~48%｜深色區塊 ~20%｜次底 ~14%｜黑 ~1%｜彩色 0%
+   硬規則：
+   1. --accent 是應援色不是介面色，明度太高（0.60）——
+      白底上當文字只有 2.01:1。**永遠不當文字色**，文字一律用 --accent-deep
+   2. 疊在 --accent 上的字用 --accent-ink 深墨，不用白字（白字只有 2.01:1）
+      GEPPY 自己的綠色按鈕也是深字，不是白字
+   3. 圓角是這個風格的骨幹：16px（按鈕、卡片）／24px（大卡）／48px（區塊容器）
+   4. 靜止狀態零陰影，陰影只在 hover 出現
    ========================================================================== */
 
 :root {
   /* ---------- 色彩：中性 ---------- */
-  --bg:             #FAF7F2;  /* 暖米白，主底。不用純白是去 AI 味最有效的一招 */
-  --bg-alt:         #F2EDE5;  /* 次底，區塊交替、卡片群容器 */
-  --surface:        #FFFFFF;  /* 卡片。白卡浮在暖米白上，不用陰影就有層次 */
-  --text-primary:   #1F1B18;  /* 暖黑 */
-  --text-secondary: #6B625B;  /* 暖灰 */
-  --border:         #E3DCD2;
+  --bg:             #FFFFFF;  /* 主底。GEPPY 白色佔 56 次 */
+  --bg-alt:         #F6F6F6;  /* 區塊容器底，配 48px 大圓角 */
+  --surface:        #FFFFFF;  /* 白卡 */
+  --text-primary:   #1F2933;
+  --text-secondary: #6B7280;
+  --border:         #E5E7EB;
 
-  /* ---------- 色彩：主色 ----------
-     2026-08-20 改：拿掉螢光萊姆綠 #96FF1A。
-     高飽和色本身就是「科技感」的來源，而科技感正是 AI 味最好認的部分。
+  /* ---------- 色彩：主色 ---------- */
+  --accent:       #6FC5C2;  /* 薄荷。按鈕底、有機色塊、強調底線 */
+  --accent-deep:  #267572;  /* 文字、連結、圖示線條（5.43:1） */
+  --accent-ink:   #1F2933;  /* 疊在薄荷上的字（7.34:1） */
+  --accent-tint:  #E5F2F1;
 
-     照 Antara 的做法 —— 介面完全無彩色，按鈕是黑的，
-     整頁的顏色全部來自作品截圖。網站是相框，作品才是畫。
-     （PLAID 那條路是「中性底 + 高飽和色只做巨型 SVG 色塊」，
-       但那需要挑一個顏色，這裡刻意不挑。）
-
-     Antara 實測：#F5F5F5 佔 48.2%、#000000 佔 1.2%、沒有主色。 */
-  --accent:         #1F1B18;  /* 暖黑。主要按鈕、強調標記 */
-  --accent-hover:   #000000;
-  --accent-ink:     #FAF7F2;  /* 疊在主色上的字 —— 現在是暖米白 */
-  --accent-tint:    #F2EDE5;  /* 標籤底，只是低一階的中性色 */
-
-  /* ---------- 色彩：深色區塊 ----------
-     用來切開長頁的節奏。深底上主色完全解放（14.1:1），
-     現在被「綠色不能當字」綁住的地方，在這裡都不受限 */
-  --ink:                #1A1714;  /* 區塊底，對應 VEED 的 #121212 */
-  --ink-surface:        #2B251E;  /* 區塊裡的卡片，對應 VEED 的 #333333 */
-  --ink-text:           #F4F2EE;
-  --ink-text-secondary: #A79E93;
-  --ink-border:         #4A423A;
+  /* ---------- 卡片淡色底 ---------- */
+  --tint-mint:   #E5F2F1;
+  --tint-blue:   #E7EEF8;
+  --tint-yellow: #F8F4E7;
 
   /* ---------- 字體 ---------- */
-  /* 英文不要用 Inter —— 它是 AI 生成網站的預設字體，用了自帶 AI 味。
-     2026-08-19 改成襯線：襯線是出版物的語言不是軟體的語言，這是減少「科技感」最有效的一招。
+  /* GEPPY 是 Montserrat（英文大標）＋ Noto Sans JP。這裡對應繁中 */
+  --font-display: "Montserrat", "Noto Sans TC", sans-serif;
+  --font-body:    "Noto Sans TC", "Montserrat", sans-serif;
 
-     標題這一組是同一個 stack 吃兩種語言 —— 英文落在 Instrument Serif、
-     中文自動 fallback 到思源宋體。不要手動拆 span，那會讓行高對不齊。 */
-  --font-display: "Instrument Serif", "Noto Serif TC", serif;
-  --font-body:    "Noto Sans TC", sans-serif;
-
-  /* 字重。層次全交給字級落差，不用 500/600 做中間過渡 */
+  /* 只用兩檔。GEPPY 實測 700 出現 105 次、400 出現 38 次、600 僅 4 次 */
   --fw-regular: 400;
   --fw-bold:    700;
 
-  /* ⚠️ Instrument Serif 只有 400，沒有粗體。
-     對它下 font-weight:700 瀏覽器會擠出假粗體（很醜）。
-     所以所有吃 --font-display 的地方一律用這個字重，中文標題跟著用 400 —— 
-     兩邊一致，而且「靠字級不靠字重」本來就是 PLAID 撐氣勢的做法 */
-  --fw-display: 400;
-
   /* ---------- 字級 ---------- */
-  /* 字級跨度刻意拉大、中間層級砍掉。
-     Antara 是 10px → 268px 中間幾乎空的；PLAID 只有 7 階、主力 14px。
-     均勻的 h1/h2/h3/body 四階正是模板感的來源 */
-  --fs-display: clamp(56px, 12vw, 160px);  /* hero 大標 */
-  --fs-h1:      clamp(36px, 6vw, 88px);    /* 區塊大標，拉開跟內文的距離 */
-  --fs-h2:      28px;
+  --fs-display: clamp(44px, 6.4vw, 88px);   /* hero 大標 */
+  --fs-h1:      clamp(30px, 3.6vw, 46px);   /* 區塊大標 */
+  --fs-h2:      32px;
   --fs-h3:      20px;
   --fs-lead:    18px;
   --fs-body:    16px;
-  --fs-sm:      14px;   /* 內文主力，學兩個參考站 */
+  --fs-sm:      14px;
   --fs-caption: 12px;
 
-  /* ---------- 行高：字越小行高越鬆 ---------- */
-  --lh-display: 1.02;   /* 0.95 時上一行的逗號會戳進下一行的反白黑塊 */
-  --lh-heading: 1.4;
+  /* ---------- 行高：字越小行高越鬆（學 GEPPY） ---------- */
+  --lh-display: 1.15;
+  --lh-heading: 1.5;
   --lh-body:    1.8;
 
   /* ---------- 間距：4px grid ---------- */
@@ -92,37 +64,32 @@
   --space-8:   32px;
   --space-12:  48px;
   --space-20:  80px;
-  --space-30:  120px;   /* 區塊上下留白 */
+  --space-30:  120px;
 
-  /* ---------- 圓角 ----------
-     2026-08-19 改：卡片圓角歸零。
-     16／24px 的圓角就是 SaaS 卡片感 —— 也就是「科技感」，也就是 AI 味。
-     兩個參考站都沒有這個尺寸：Antara 全站 0，PLAID 只有 30／90／180 的大圓。
-     現在只留兩極 —— 方角（結構）與藥丸（標籤），中間那一階拿掉 */
-  --radius-none: 0;     /* 卡片、區塊、圖片 */
-  --radius-sm:   0;     /* 按鈕。留著這個名字，之後要改回來只動一個地方 */
-  --radius-lg:   0;     /* 大卡片 */
-  --radius-pill: 999px; /* 藥丸標籤，唯一保留的圓 */
+  /* ---------- 圓角 ---------- */
+  --radius-sm:    16px;  /* 按鈕、小卡。GEPPY 出現 63 次 */
+  --radius-lg:    24px;  /* 大卡片。36 次 */
+  --radius-block: 48px;  /* 區塊容器。7 次 */
+  --radius-pill:  999px;
+  --radius-blob:  60% 40% 55% 45% / 45% 55% 40% 60%;  /* 有機曲線 */
 
   /* ---------- 尺寸 ---------- */
-  --container:   1200px;
-  --gutter:      40px;
-  --btn-height:  52px;
+  --container:  1200px;
+  --gutter:     40px;
+  --btn-height: 52px;
 
-  /* ---------- 動效 ---------- */
+  /* ---------- 動效：慢、柔、克制 ---------- */
   --ease:     cubic-bezier(0.4, 0.4, 0, 1);
   --duration: 0.3s;
+  --shadow-hover: 0 12px 32px rgba(31, 41, 51, 0.10);
 }
 
 /* ==========================================================================
    Reset
    ========================================================================== */
 
-*,
-*::before,
-*::after { box-sizing: border-box; }
-
-html { -webkit-text-size-adjust: 100%; }
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
 
 body {
   margin: 0;
@@ -130,21 +97,17 @@ body {
   color: var(--text-primary);
   font-family: var(--font-body);
   font-size: var(--fs-body);
-  font-weight: var(--fw-regular);
   line-height: var(--lh-body);
   -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;      /* 有機色塊會溢出視窗，這行防止橫向捲動 */
 }
 
-h1, h2, h3, p { margin: 0; }
-
+h1, h2, h3, p, ul, ol { margin: 0; padding: 0; }
+li { list-style: none; }
 img, svg { display: block; max-width: 100%; }
-
 a { color: inherit; text-decoration: none; }
 
-::selection {
-  background: var(--accent);
-  color: var(--accent-ink);
-}
+::selection { background: var(--accent); color: var(--accent-ink); }
 
 /* ==========================================================================
    共用元件
@@ -166,7 +129,7 @@ a { color: inherit; text-decoration: none; }
   gap: var(--space-2);
   min-height: var(--btn-height);
   padding: 0 var(--space-6);
-  border: 1px solid transparent;
+  border: 2px solid transparent;
   border-radius: var(--radius-sm);
   font-family: var(--font-body);
   font-size: var(--fs-body);
@@ -175,30 +138,27 @@ a { color: inherit; text-decoration: none; }
   cursor: pointer;
   transition: background-color var(--duration) var(--ease),
               border-color var(--duration) var(--ease),
-              color var(--duration) var(--ease);
+              color var(--duration) var(--ease),
+              transform var(--duration) var(--ease);
 }
 
-/* 高承諾：實心主色。全站主色面積的大宗，所以其他地方要克制。
-   字是暖黑不是白 —— 白字在螢光綠上只有 1.3:1，等於沒有字 */
+/* 實心：薄荷底 ＋ 深墨字。白字在薄荷上只有 2.01:1 */
 .btn--primary {
   background: var(--accent);
+  border-color: var(--accent);
   color: var(--accent-ink);
 }
-.btn--primary:hover { background: var(--accent-hover); }
+.btn--primary:hover { background: var(--accent-deep); border-color: var(--accent-deep); color: #FFFFFF; }
 
-/* 低承諾：透明底 + 描邊 */
+/* 線框：白底 ＋ 深薄荷框與字（學 GEPPY 的雙 CTA） */
 .btn--secondary {
-  background: transparent;
-  border-color: var(--border);
-  color: var(--text-primary);
+  background: var(--surface);
+  border-color: var(--accent);
+  color: var(--accent-deep);
 }
-.btn--secondary:hover { border-color: var(--text-primary); }
+.btn--secondary:hover { background: var(--accent-tint); }
 
-/* focus 外框不能用 --accent —— 它在暖底上看不見。用暖黑才有 16:1 */
-.btn:focus-visible {
-  outline: 2px solid var(--text-primary);
-  outline-offset: 3px;
-}
+.btn:focus-visible { outline: 2px solid var(--accent-deep); outline-offset: 3px; }
 
 /* ---------- 藥丸標籤 ---------- */
 
@@ -208,49 +168,21 @@ a { color: inherit; text-decoration: none; }
   padding: 6px var(--space-3);
   border-radius: var(--radius-pill);
   background: var(--accent-tint);
-  color: var(--text-primary);
+  color: var(--accent-deep);
   font-size: var(--fs-sm);
   font-weight: var(--fw-bold);
   line-height: 1.4;
 }
+.pill--solid { background: var(--accent); color: var(--accent-ink); }
 
-/* 需要更搶眼的標籤時用實心黑 */
-.pill--solid {
-  background: var(--accent);
-  color: var(--accent-ink);
-}
+/* ---------- 強調底線（GEPPY 標題下方那條短綠線） ---------- */
 
-/* ---------- 強調標記 ----------
-   沒有螢光色之後，強調一段文字的做法改成反白：黑底、米白字。
-   這是編輯設計的手法（報紙的黑條標題），不是螢光筆。
-
-   ⚠️ 不能直接對 inline 元素下 background —— 那會填滿整個 line-height，
-   160px 的大標會撐出一塊比字高兩倍的黑方塊。
-   用偽元素才控制得住上下界 */
 .mark {
-  position: relative;
-  z-index: 0;
-  color: var(--accent-ink);
-  padding: 0 0.1em;
-}
-.mark::before {
-  content: "";
-  position: absolute;
-  z-index: -1;
-  left: 0;
-  right: 0;
-  top: 0.1em;      /* 從字的上緣起算，不從行框頂 */
-  bottom: 0.16em;  /* 收在 baseline 稍下方 */
-  background: var(--accent);
-}
-
-/* ---------- 髮絲細線（學 PLAID，成本近乎零的結構層） ---------- */
-
-.hairline {
-  height: 1px;
-  border: 0;
-  margin: 0;
-  background: var(--border);
+  background-image: linear-gradient(var(--accent), var(--accent));
+  background-repeat: no-repeat;
+  background-size: 100% 0.36em;
+  background-position: 0 88%;
+  padding-inline: 0.06em;
 }
 
 /* ==========================================================================
@@ -258,12 +190,10 @@ a { color: inherit; text-decoration: none; }
    ========================================================================== */
 
 @media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
   }
 }

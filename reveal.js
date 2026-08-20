@@ -1,90 +1,65 @@
 /* ==========================================================================
-   reveal.js — 捲動相關的動態
+   reveal.js — 捲動進場
 
-   三件事：
-   1. 深色區塊的遮罩揭露（上緣的弧隨捲動攤平）
-   2. 案例的進場（淡入＋上移，圖片與文字錯開）
-   3. 案例圖片的視差
+   只做兩件事，都是原生的、0 KB 依賴：
+   1. [data-reveal] 進視窗時淡入＋上移，同一區塊內錯開時間依序出現
+   2. 頁面捲動後幫 header 加一條底線
 
-   全部原生實作，沒有任何外部套件。沒用 GSAP／Lenis 的理由見設計規格。
+   沒有用 GSAP／Lenis。GEPPY 自己也沒有任何動畫函式庫 ——
+   它的動態就只有淡入，克制是這個風格的一部分。
 
-   關掉動效或瀏覽器不支援時，一律回到「什麼都沒有但內容完整」的狀態 ——
-   進場的隱藏狀態綁在 .js-reveal 上，就是為了這個。
+   關掉動效或瀏覽器不支援 IntersectionObserver 時，
+   完全不加 .js-reveal，內容就是靜態但完整的。
    ========================================================================== */
 
 (() => {
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  /* ---------- 1. 深色區塊的遮罩揭露 ---------- */
-  (() => {
-    if (reduce) return;
-    if (!CSS.supports('clip-path', 'ellipse(100% 100% at 50% 100%)')) return;
-
-    const targets = [...document.querySelectorAll('.section--dark')];
-    if (!targets.length) return;
-    targets.forEach(el => el.classList.add('is-revealing'));
-
-    const RX_START = 70, RX_END = 260;
-    let ticking = false;
-    const update = () => {
-      ticking = false;
-      const vh = innerHeight;
-      for (const el of targets) {
-        const r = el.getBoundingClientRect();
-        if (r.bottom < 0 || r.top > vh) continue;
-        const p = Math.min(1, Math.max(0, (vh - r.top) / vh));
-        el.style.setProperty('--reveal-rx', (RX_START + (RX_END - RX_START) * p) + '%');
-      }
-    };
-    const onScroll = () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } };
-    addEventListener('scroll', onScroll, { passive: true });
-    addEventListener('resize', onScroll, { passive: true });
-    update();
-  })();
-
-  /* ---------- 2. 案例進場 ---------- */
+  /* ---------- 1. 進場 ---------- */
   (() => {
     const items = [...document.querySelectorAll('[data-reveal]')];
     if (!items.length) return;
-    // 關掉動效、或瀏覽器沒有 IntersectionObserver 時就不隱藏任何東西
     if (reduce || !('IntersectionObserver' in window)) return;
 
     document.documentElement.classList.add('js-reveal');
 
-    const io = new IntersectionObserver((entries) => {
+    // 同一個區塊裡的元素依序錯開，跨區塊重新計算
+    const groups = new Map();
+    items.forEach(el => {
+      const key = el.closest('section, footer') || document.body;
+      const arr = groups.get(key) || [];
+      arr.push(el);
+      groups.set(key, arr);
+    });
+    groups.forEach(arr => {
+      arr.forEach((el, i) => {
+        el.style.setProperty('--d', Math.min(i * 0.08, 0.48) + 's');
+      });
+    });
+
+    const io = new IntersectionObserver(entries => {
       for (const e of entries) {
         if (!e.isIntersecting) continue;
         e.target.classList.add('is-in');
-        io.unobserve(e.target);          // 只播一次，往回捲不要重來
+        io.unobserve(e.target);        // 只播一次，往回捲不重來
       }
-    }, { rootMargin: '0px 0px -12% 0px', threshold: 0.08 });
+    }, { rootMargin: '0px 0px -10% 0px', threshold: 0.05 });
 
     items.forEach(el => io.observe(el));
   })();
 
-  /* ---------- 3. 圖片視差 ---------- */
+  /* ---------- 2. header 捲動後加底線 ---------- */
   (() => {
-    if (reduce) return;
-    if (innerWidth < 720) return;        // 手機不跑，省效能
-    const media = [...document.querySelectorAll('[data-parallax]')];
-    if (!media.length) return;
-
-    const AMOUNT = 40;                   // 上下各 40px，再多就會看出圖在滑動
+    const header = document.querySelector('.site-header');
+    if (!header) return;
     let ticking = false;
     const update = () => {
       ticking = false;
-      const vh = innerHeight;
-      for (const el of media) {
-        const r = el.getBoundingClientRect();
-        if (r.bottom < -200 || r.top > vh + 200) continue;
-        // 元素中心在視窗中央時是 0，往上往下各推到 ±1
-        const p = ((vh / 2) - (r.top + r.height / 2)) / vh;
-        el.style.setProperty('--py', (p * AMOUNT).toFixed(1) + 'px');
-      }
+      header.classList.toggle('is-stuck', scrollY > 8);
     };
-    const onScroll = () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } };
-    addEventListener('scroll', onScroll, { passive: true });
-    addEventListener('resize', onScroll, { passive: true });
+    addEventListener('scroll', () => {
+      if (!ticking) { ticking = true; requestAnimationFrame(update); }
+    }, { passive: true });
     update();
   })();
 })();

@@ -1,27 +1,23 @@
 /* ==========================================================================
-   style.css — 版面樣式
-   變數一律來自 tokens.css，這裡不重新定義任何 :root 變數，也不硬填色碼與 px
+   style.css — 版面樣式（GEPPY 風格）
+   變數一律來自 tokens.css，這裡不重新定義任何 :root 變數
    ========================================================================== */
 
 /* ==========================================================================
-   Header ／ Hero ／ 作品 —— 照 antara.studio/work 的量測值重建
-
-   量到的骨架（1440 視窗）：
-     hero 大標   RecifeDisplay 144px / line-height 144px / weight 300，四行
-                 每行有自己的縮排（+142 / 0 / +177 / +71），字間固定 36px
-     work-item   1118 寬，文字欄 284 寬且【置中對齊】
-                 編號縮排 +90、客戶名 14px uppercase、標題襯線 27px
-                 大圖 867×547，往下偏移 216，並偏出容器一側約 116
-                 小圖 247×261，往下偏移 359，偏出【文字那一側】約 108
-     項目間距    590（item 高 490，所以相鄰兩件會垂直交錯）
+   Header
    ========================================================================== */
 
 .site-header {
-  position: absolute;
-  inset: 0 0 auto;
-  z-index: 10;
-  padding-block: var(--space-8);
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid transparent;
+  transition: border-color var(--duration) var(--ease);
 }
+.site-header.is-stuck { border-bottom-color: var(--border); }
+
 .site-header__inner {
   display: flex;
   align-items: center;
@@ -29,660 +25,432 @@
   width: 100%;
   max-width: var(--container);
   margin-inline: auto;
-  padding-inline: var(--gutter);
+  padding: var(--space-4) var(--gutter);
 }
+
 .wordmark {
-  font-family: var(--font-body);
-  font-size: var(--fs-sm);
+  font-family: var(--font-display);
+  font-size: var(--fs-h3);
   font-weight: var(--fw-bold);
-  letter-spacing: 0.18em;
+  letter-spacing: 0.16em;
 }
-.nav {
-  display: flex;
-  gap: var(--space-6);
-  margin-left: auto;
-  font-size: var(--fs-sm);
-}
-.nav a { position: relative; }
-/* 動態底線：從左展開 */
+
+.nav { display: flex; gap: var(--space-6); margin-left: auto; font-size: var(--fs-sm); }
+.nav a { position: relative; padding-block: 4px; transition: color var(--duration) var(--ease); }
+.nav a:hover { color: var(--accent-deep); }
+/* 柔和的底線，從左展開 */
 .nav a::after {
   content: "";
   position: absolute;
-  left: 0; right: 0; bottom: -4px;
-  height: 1px;
-  background: currentColor;
+  left: 0; right: 0; bottom: 0;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--accent);
   transform: scaleX(0);
   transform-origin: left;
   transition: transform var(--duration) var(--ease);
 }
 .nav a:hover::after { transform: scaleX(1); }
 
-/* 橢圓外框的 CTA（Antara 右上角那顆） */
-.btn-oval {
-  padding: 10px 20px;
-  border: 1px solid var(--text-primary);
-  border-radius: var(--radius-pill);
-  font-size: var(--fs-sm);
-  transition: background-color var(--duration) var(--ease), color var(--duration) var(--ease);
-}
-.btn-oval:hover { background: var(--text-primary); color: var(--bg); }
+.site-header__cta { display: flex; gap: var(--space-2); }
+.btn--sm { min-height: 40px; padding: 0 var(--space-4); font-size: var(--fs-sm); }
 
-/* ---------- Hero ---------- */
+/* ==========================================================================
+   有機曲線裝飾
+   四組不對稱的 border-radius 百分比做出葉子／水滴那種圓潤不規則形。
+   用 CSS 不用 SVG 的原因：形狀本身可以動畫，飄動時會慢慢變形
+   ========================================================================== */
+
+.blobs { position: absolute; inset: 0; z-index: -1; pointer-events: none; overflow: hidden; }
+
+.blob {
+  position: absolute;
+  display: block;
+  border-radius: var(--radius-blob);
+  opacity: 0.55;
+  animation: drift 26s var(--ease) infinite alternate;
+}
+/* ⚠️ 每一團的底部都必須留在 hero 內。
+   碰到 .blobs 的下緣會被 overflow:hidden 切成一條直線，圓潤感就沒了。
+   被視窗左右邊緣切掉沒關係 —— 那看起來是刻意延伸出畫面 */
+.blob--1 {
+  width: 42vw; aspect-ratio: 1.15;
+  top: -18vw; right: -10vw;
+  background: var(--tint-mint);
+}
+.blob--2 {
+  width: 26vw; aspect-ratio: 1;
+  top: 6vh; left: -13vw;
+  background: var(--tint-blue);
+  animation-duration: 32s;
+  animation-delay: -8s;
+}
+.blob--3 {
+  width: 17vw; aspect-ratio: 0.9;
+  top: 26vh; right: 14vw;
+  background: var(--tint-yellow);
+  animation-duration: 38s;
+  animation-delay: -16s;
+}
+
+/* 慢速飄動＋變形。20 秒以上才不會讓人注意到它在動 */
+@keyframes drift {
+  0%   { border-radius: 60% 40% 55% 45% / 45% 55% 40% 60%; transform: translate(0, 0) rotate(0deg); }
+  50%  { border-radius: 42% 58% 38% 62% / 58% 42% 60% 40%; transform: translate(1.5%, 2%) rotate(5deg); }
+  100% { border-radius: 55% 45% 62% 38% / 40% 60% 45% 55%; transform: translate(-1.5%, -1.5%) rotate(-4deg); }
+}
+
+/* ==========================================================================
+   Hero
+   ========================================================================== */
 
 .hero {
   position: relative;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  min-height: 100svh;
-  padding: calc(var(--space-30) + var(--space-12)) var(--gutter) var(--space-30);
-  overflow: hidden;
+  padding-block: var(--space-30) var(--space-20);
 }
-
-/* ---------- 背景光暈 ----------
-   兩團色斑：左上偏冷的灰、右下暖金。
-   靠 blur 把邊緣化掉，所以不會有「漸層條紋」那種廉價感。
-   ⚠️ 這是規格硬規則第 3 條「零漸層」的唯一破例，Alvie 2026-08-20 指定 */
-.hero__glow {
-  position: absolute;
-  /* 往外拉很多：blur(90px) 碰到 overflow:hidden 的邊會切出一條硬界線，
-     色斑中心必須離邊界夠遠才不會露出來 */
-  inset: -30% -20%;
-  z-index: -1;
-  pointer-events: none;
-  filter: blur(80px);
-  background:
-    /* 左上偏冷的灰煙 —— 要夠濃才看得出來 */
-    radial-gradient(26% 30% at 34% 30%, rgba(78, 72, 64, 0.50) 0%, rgba(78, 72, 64, 0) 68%),
-    /* 右下暖金主團 —— 收小，周圍要留乾淨的底 */
-    radial-gradient(30% 32% at 58% 66%, rgba(198, 160, 84, 0.60) 0%, rgba(198, 160, 84, 0) 70%),
-    /* 一小團補在右側，讓金色不要是完美的圓 */
-    radial-gradient(18% 22% at 74% 54%, rgba(216, 188, 126, 0.42) 0%, rgba(216, 188, 126, 0) 72%);
-}
+.hero__inner { position: relative; z-index: 1; }
 
 .hero__display {
-  position: relative;   /* 疊在光暈上面 */
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  max-width: var(--container);
-  margin-inline: auto;
   font-family: var(--font-display);
-  font-weight: var(--fw-display);
-  font-size: clamp(64px, 11.5vw, 168px);
-  line-height: 1;                 /* Antara 是 144/144，行高等於字級 */
+  font-size: var(--fs-display);
+  font-weight: var(--fw-bold);
+  line-height: var(--lh-display);
   letter-spacing: -0.02em;
 }
-.hero__display .ln { display: block; }
-.hero__display i  { font-style: normal; }
+/* 學 GEPPY 的「Marketing With Fun.」—— 最後一個詞換成主色 */
+.hero__display em { font-style: normal; color: var(--accent); }
 
-/* 每行各自縮排 —— 這是 Antara「錯落」的全部來源，字間其實是固定的 */
-.ln--a { margin-left: 11%; }
-.ln--b { margin-left: 0; }
-.ln--c { margin-left: 5%; }
-
-/* 靠容器左緣，跟大標同一條線。
-   原本 max-width 與 max-inline-size 兩個限制打架，auto margin 把它推到畫面中間 */
 .hero__lead {
-  width: min(100%, var(--container));
-  margin: var(--space-12) auto 0;
-  padding-right: 52%;              /* 用右內距逼它早點換行，不用第二個 max-width */
+  max-width: 30em;
+  margin-top: var(--space-6);
   font-size: var(--fs-lead);
-  line-height: 1.9;
   color: var(--text-secondary);
 }
 .hero__lead strong { font-weight: var(--fw-bold); color: var(--text-primary); }
 
-/* 右側的捲動指示：旋轉圓形文字 ＋ 細長箭頭 */
-.hero__scroll {
-  position: absolute;
-  right: var(--gutter);
-  bottom: var(--space-20);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: var(--space-4);
-}
-.hero__scroll-ring {
-  width: 96px;
-  height: 96px;
-  animation: spin 16s linear infinite;
-}
-.hero__scroll-ring text {
-  font-family: var(--font-body);
-  font-size: 8px;
-  letter-spacing: 0.22em;
-  fill: var(--text-secondary);
-}
-@keyframes spin { to { transform: rotate(360deg); } }
-.hero__scroll-line {
-  width: 1px;
-  height: 120px;
-  background: linear-gradient(var(--border), transparent);
-}
-
-/* ==========================================================================
-   作品列表
-   ========================================================================== */
-
-.works { padding-block: var(--space-20) var(--space-30); }
-
-/* 「精選作品 ————————— PROJECTS」：一條線貫穿、兩端有字 */
-.works-header {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: var(--space-6);
-  margin: 0;
-  padding-bottom: var(--space-2);
-  border-bottom: 1px solid var(--text-primary);
-  font-size: var(--fs-sm);
-  letter-spacing: 0.06em;
-}
-
-.works-list {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.work-item__inner {
-  position: relative;
-  display: grid;
-  grid-template-columns: 284px 1fr;
-  gap: 84px;
-  width: min(100% - var(--gutter) * 2, 1118px);
-  margin-inline: auto;
-  min-height: 490px;
-}
-
-/* 文字欄置中 —— 但只到標題為止。
-   Antara 的文字欄只有「編號＋客戶名＋一句英文標題」，高 195px，置中沒問題；
-   我們多了兩段中文說明，整欄置中會很難讀，所以長段落改回左對齊 */
-.work-content { position: relative; text-align: center; }
-.work-info { width: 284px; margin-inline: auto; }   /* 230 放不下 27px 的中文標題 */
-
-.work-num {
-  display: block;
-  margin-left: 56px;              /* Antara 的編號不跟客戶名切齊，是縮排的 */
-  font-family: var(--font-display);
-  font-style: italic;
-  font-size: var(--fs-caption);
-  letter-spacing: 0.1em;
-  color: var(--text-secondary);
-}
-.work-client {
-  margin-top: var(--space-2);
-  font-size: var(--fs-sm);
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-}
-.work-title {
-  margin-top: var(--space-6);
-  font-family: var(--font-display);
-  font-weight: var(--fw-display);
-  /* Antara 是 27px，但那是給英文的。284px 欄寬 @27px 只放得下 10.5 個中文字，
-     「登入前五頁與雙因素驗證」11 字就會掉一個孤字。降到 25px 剛好 */
-  font-size: 25px;
-  line-height: 1.3;
-}
-.work-what {
-  margin-top: var(--space-6);
-  font-size: var(--fs-sm);
-  color: var(--text-secondary);
-}
-.work-key {
-  margin-top: var(--space-6);
-  padding-top: var(--space-6);
-  border-top: 1px solid var(--border);
-  font-size: var(--fs-sm);
-  text-align: left;
-}
-.work-key b {
-  display: block;
-  margin-bottom: var(--space-2);
-  font-size: var(--fs-caption);
-  letter-spacing: 0.08em;
-  color: var(--text-secondary);
-  font-weight: var(--fw-regular);
-}
-
-/* 長段落左對齊 */
-.work-what, .work-key { text-align: left; }
-
-/* 圖片：先用白方塊。比例與偏移照 Antara */
-.work-l-img, .work-s-img {
-  display: grid;
-  place-items: center;
-  background: var(--surface);
-  border: 1px solid var(--border);
-}
-.ph { font-size: var(--fs-caption); color: var(--text-secondary); letter-spacing: .08em; }
-
-.work-l-img {
-  aspect-ratio: 867 / 547;
-  margin-top: 216px;              /* 大圖比文字低 216，這是交錯感的來源 */
-  margin-right: -116px;           /* 偏出容器右緣 */
-}
-/* 小圖用一般排版流不用絕對定位 —— Antara 的文字欄高度固定 490，
-   可以寫死 top:359；我們的文字長度會變，寫死就會壓到「一個關鍵決策」那段 */
-.work-s-img {
-  width: 247px;
-  aspect-ratio: 247 / 261;
-  margin-top: var(--space-12);
-  margin-left: -108px;            /* 偏出容器左緣，維持 Antara 的偏移量 */
-}
-
-/* 交錯：整組左右鏡像 */
-.work-item.-reversed .work-item__inner { grid-template-columns: 1fr 284px; }
-.work-item.-reversed .work-content { order: 2; }
-.work-item.-reversed .work-l-img { margin-right: 0; margin-left: -116px; }
-.work-item.-reversed .work-s-img { margin-left: auto; margin-right: -108px; }
-
-/* 項目間距 590 −  item 高 490 = 100 */
-.work-item + .work-item { margin-top: 100px; }
-
-/* ==========================================================================
-   Footer
-   ========================================================================== */
-
-.site-footer {
-  padding-block: var(--space-12);
-}
-
-.site-footer__inner {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--space-4);
-  padding-top: var(--space-8);
-  border-top: 1px solid var(--border);
-  font-size: var(--fs-sm);
-  color: var(--text-secondary);
-}
-
-.site-footer a {
-  border-bottom: 1px solid var(--border);
-  transition: border-color var(--duration) var(--ease),
-              color var(--duration) var(--ease);
-}
-
-.site-footer a:hover {
-  color: var(--text-primary);
-  border-color: var(--text-primary);
-}
-
-/* ==========================================================================
-   進場動效（prefers-reduced-motion 的關閉條件寫在 tokens.css）
-   ========================================================================== */
-
-/* 關掉動效時捲動指示的旋轉要停 */
-@media (prefers-reduced-motion: reduce) {
-  .hero__scroll-ring { animation: none; }
-}
-
-@keyframes rise {
-  from { opacity: 0; transform: translateY(16px); }
-  to   { opacity: 1; transform: none; }
-}
-
-/* hero 進場：大標一行一行上來 */
-.hero__display .ln,
-.hero__lead {
-  animation: rise 0.9s var(--ease) backwards;
-}
-.hero__display .ln:nth-child(1) { animation-delay: 0.05s; }
-.hero__display .ln:nth-child(2) { animation-delay: 0.15s; }
-.hero__display .ln:nth-child(3) { animation-delay: 0.25s; }
-.hero__lead { animation-delay: 0.4s; }
-
-/* ==========================================================================
-   RWD —— 桌機優先，但手機版必須做（客戶大量從 Threads 手機點進來）
-   ========================================================================== */
-
-@media (max-width: 720px) {
-  :root {
-    --gutter: 24px;
-  }
-
-  .site-header__meta { display: none; }
-
-  .hero {
-    /* 不改成 auto —— 膠囊需要一個明確的高度才有地板可落 */
-    padding-block: calc(var(--space-30) + var(--space-4)) var(--space-20);
-  }
-
-  .hero__display {
-    max-width: 100%;
-    letter-spacing: -0.025em;
-  }
-
-  .hero__actions {
-    width: 100%;
-    flex-direction: column;
-  }
-
-  .hero__actions .btn { width: 100%; }
-
-  .site-footer__inner { flex-direction: column; align-items: flex-start; }
-}
+.hero__actions { display: flex; flex-wrap: wrap; gap: var(--space-3); margin-top: var(--space-8); }
+.hero__note { margin-top: var(--space-4); font-size: var(--fs-sm); color: var(--text-secondary); }
 
 /* ==========================================================================
    區塊骨架
    ========================================================================== */
 
-.section { padding-block: var(--space-30); }
-
-.section--alt  { background: var(--bg-alt); }
-
-/* 深色區塊：切開長頁的節奏。全站放兩塊，分布落在 20% 上下 */
-.section--dark {
-  background: var(--ink);
-  color: var(--ink-text);
-}
-
-/* 遮罩揭露：上緣是一道弧，捲動時攤平（rx 由 reveal.js 餵進來）。
-   .is-revealing 是 JS 加的 —— 沒有 JS 或關掉動效時就是一般的直邊 */
-.section--dark.is-revealing {
-  clip-path: ellipse(var(--reveal-rx, 260%) 100% at 50% 100%);
-}
-
-/* 弧線把上緣吃掉一塊，多給一點上留白讓標題不會貼到邊 */
-.section--dark.is-revealing { padding-top: calc(var(--space-30) + var(--space-12)); }
+.section { padding-block: var(--space-20); }
 
 .eyebrow {
-  margin-bottom: var(--space-4);
-  font-size: var(--fs-caption);
-  letter-spacing: 0.1em;
-  color: var(--text-secondary);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-3);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+  color: var(--accent-deep);
 }
-.section--dark .eyebrow { color: var(--ink-text-secondary); }
+/* GEPPY 小標前面那顆同心圓點 */
+.eyebrow::before {
+  content: "";
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-tint);
+}
 
 .section__title {
-  max-width: 14em;   /* 中文 1em ≈ 一個字；用 ch 會算成半形寬，寬度會失準 */
+  max-width: 20em;
   font-family: var(--font-display);
   font-size: var(--fs-h1);
-  font-weight: var(--fw-display);
-  line-height: 1.2;
-  letter-spacing: -0.03em;
-  text-wrap: balance;
+  font-weight: var(--fw-bold);
+  line-height: 1.4;
+  letter-spacing: -0.01em;
 }
-
-/* 淺底上反白（黑底米白字）；深底上反過來 —— 米白底黑字 */
-.section__title em {
-  position: relative;
-  z-index: 0;
-  font-style: normal;
-  color: var(--accent-ink);
-  padding: 0 0.08em;
-}
-.section__title em::before {
-  content: "";
-  position: absolute;
-  z-index: -1;
-  left: 0;
-  right: 0;
-  top: 0.08em;
-  bottom: 0.12em;
-  background: var(--accent);
-}
-.section--dark .section__title em { color: var(--ink); }
-.section--dark .section__title em::before { background: var(--ink-text); }
+.section__title em { font-style: normal; }
 
 .section__lead {
-  max-width: 26em;
+  max-width: 32em;
   margin-top: var(--space-4);
   color: var(--text-secondary);
 }
 
-.grid-2, .grid-3, .grid-4 {
+/* 淺灰底 ＋ 48px 大圓角的區塊容器（GEPPY 的做法） */
+.panel {
+  padding: var(--space-20) var(--space-12);
+  border-radius: var(--radius-block);
+  background: var(--bg-alt);
+}
+
+/* ==========================================================================
+   ② 我能解決什麼 —— 三張淡色圓角卡
+   ========================================================================== */
+
+.tint-cards {
   display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: var(--space-6);
   margin-top: var(--space-12);
 }
-.grid-2 { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
-.grid-3 { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
-.grid-4 { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
 
-/* ==========================================================================
-   ② 我能解決什麼 ／ ⑤ 合作流程 —— 深色卡片
-   ========================================================================== */
-
-.dcard {
+.tcard {
   padding: var(--space-8);
-  border-radius: var(--radius-none);
-  background: var(--ink-surface);
+  border-radius: var(--radius-lg);
+  transition: transform var(--duration) var(--ease), box-shadow var(--duration) var(--ease);
 }
-/* ⚠️ 選擇器要比 .dcard p 更具體。
-   編號是 <p>，而下面的 .dcard p 優先級較高，會把字級壓成 14px。
-   襯線體在 14px 又是深色底時，細筆畫會被抗鋸齒吃光（實測最亮只剩 #988F85）*/
-.dcard .dcard__num {
-  margin-bottom: var(--space-4);
-  font-family: var(--font-display);
-  font-size: 64px;
-  font-weight: var(--fw-display);
-  line-height: 1;
-  color: var(--ink-text);
-}
-.dcard h3 { margin-bottom: var(--space-2); font-size: var(--fs-h3); font-weight: var(--fw-bold); }
-.dcard p  { font-size: var(--fs-sm); color: var(--ink-text-secondary); }
+.tcard--mint   { background: var(--tint-mint); }
+.tcard--blue   { background: var(--tint-blue); }
+.tcard--yellow { background: var(--tint-yellow); }
 
-.dnote {
-  margin-top: var(--space-12);
-  font-size: var(--fs-lead);
-  color: var(--ink-text-secondary);
+.tcard__num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px; height: 40px;
+  margin-bottom: var(--space-4);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  font-family: var(--font-display);
+  font-weight: var(--fw-bold);
+  color: var(--accent-deep);
 }
-.dnote em { font-style: normal; color: var(--ink-text); font-weight: var(--fw-bold); }
+.tcard h3 { margin-bottom: var(--space-2); font-size: var(--fs-h3); font-weight: var(--fw-bold); }
+.tcard p  { font-size: var(--fs-sm); color: var(--text-secondary); }
+
+/* 靜止零陰影，只有 hover 才浮起來 */
+@media (hover: hover) {
+  .tcard:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); }
+}
 
 /* ==========================================================================
    ③ 服務與價格
    ========================================================================== */
 
-.scard {
-  padding: var(--space-8);
-  border-radius: var(--radius-none);
-  background: var(--surface);
+.plans {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--space-6);
+  margin-top: var(--space-12);
 }
-.scard__name  { margin: var(--space-4) 0 var(--space-2); font-size: var(--fs-h2); font-weight: var(--fw-bold); }
-.scard__price { margin-bottom: var(--space-6); }
-.scard__price b {
-  font-family: var(--font-display);
-  font-size: 36px;
-  font-weight: var(--fw-display);
-}
-.scard__price s { margin-left: var(--space-2); color: var(--text-secondary); font-size: var(--fs-body); }
 
-.ticks { margin: 0; padding: 0; list-style: none; }
+.plan {
+  padding: var(--space-8);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  transition: transform var(--duration) var(--ease), box-shadow var(--duration) var(--ease);
+}
+@media (hover: hover) {
+  .plan:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); }
+}
+.plan__name  { margin: var(--space-4) 0 var(--space-2); font-size: var(--fs-h2); font-weight: var(--fw-bold); }
+.plan__price { margin-bottom: var(--space-6); }
+.plan__price b { font-family: var(--font-display); font-size: 36px; font-weight: var(--fw-bold); }
+.plan__price s { margin-left: var(--space-2); color: var(--text-secondary); }
+
 .ticks li {
   position: relative;
   padding-left: var(--space-6);
   font-size: var(--fs-sm);
   color: var(--text-secondary);
 }
-/* 打勾用暖黑不用主色 —— 主色在暖底上是 1.2:1，畫成線條會消失 */
+/* 打勾用深薄荷 —— 薄荷本身當線條在白底上只有 2:1，會消失 */
 .ticks li::before {
   content: "";
   position: absolute;
-  left: 2px;
-  top: 0.75em;
-  width: 10px;
-  height: 5px;
-  border-left: 2px solid var(--text-primary);
-  border-bottom: 2px solid var(--text-primary);
+  left: 2px; top: 0.72em;
+  width: 10px; height: 5px;
+  border-left: 2px solid var(--accent-deep);
+  border-bottom: 2px solid var(--accent-deep);
   transform: rotate(-45deg);
 }
 
-.sub { margin: var(--space-12) 0 var(--space-6); font-size: var(--fs-h3); font-weight: var(--fw-bold); }
+.sub { margin: var(--space-12) 0 var(--space-4); font-size: var(--fs-h3); font-weight: var(--fw-bold); }
 
-/* 六行單欄排下來會讓服務區塊胖成別區的兩倍，改兩欄。
-   minmax 要夠大 —— 320px 會在 1200px 容器裡跑出三欄，
-   長項目名稱就會把價格擠到第二行 */
 .addons {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(460px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(440px, 1fr));
   column-gap: var(--space-12);
-  margin: 0;
-  padding: 0;
-  list-style: none;
 }
 .addons li {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-4);
+  display: flex; flex-wrap: wrap; gap: var(--space-4);
   justify-content: space-between;
   padding: var(--space-4) 0;
   border-bottom: 1px solid var(--border);
   font-size: var(--fs-sm);
 }
 .addons li span { color: var(--text-secondary); }
-.addons li b { font-weight: var(--fw-bold); }
 
 .fineprint { margin-top: var(--space-6); font-size: var(--fs-caption); color: var(--text-secondary); }
 
 /* ==========================================================================
-   作品的動態 —— 進場、視差、hover
+   ④ 精選作品 —— 白卡，圖片區用淡色底
    ========================================================================== */
 
-/* 隱藏狀態綁在 .js-reveal（reveal.js 加在 <html> 上）。
-   直接寫 opacity:0 的話，JS 沒載到就會變成永久空白 */
-.js-reveal [data-reveal] .work-l-img,
-.js-reveal [data-reveal] .work-s-img,
-.js-reveal [data-reveal] .work-info > * {
-  opacity: 0;
-  transform: translateY(40px);
-}
-.js-reveal [data-reveal].is-in .work-l-img,
-.js-reveal [data-reveal].is-in .work-s-img,
-.js-reveal [data-reveal].is-in .work-info > * {
-  opacity: 1;
-  transform: none;
-  transition:
-    opacity 0.9s var(--ease) var(--d, 0s),
-    transform 0.9s var(--ease) var(--d, 0s);
-}
+.works { display: flex; flex-direction: column; gap: var(--space-12); margin-top: var(--space-12); }
 
-[data-reveal] .work-info > *:nth-child(1) { --d: 0.06s; }
-[data-reveal] .work-info > *:nth-child(2) { --d: 0.12s; }
-[data-reveal] .work-info > *:nth-child(3) { --d: 0.18s; }
-[data-reveal] .work-info > *:nth-child(4) { --d: 0.24s; }
-[data-reveal] .work-info > *:nth-child(5) { --d: 0.30s; }
-
-/* 視差：移動圖片內容不移動容器，容器要留給 hover 的 scale */
-[data-parallax] > img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transform: translateY(var(--py, 0px)) scale(1.12);
-  will-change: transform;
+.work {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: var(--space-12);
+  align-items: center;
+  padding: var(--space-8);
+  border-radius: var(--radius-block);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  transition: box-shadow var(--duration) var(--ease);
 }
-[data-parallax] > .ph { transform: translateY(var(--py, 0px)); }
+@media (hover: hover) { .work:hover { box-shadow: var(--shadow-hover); } }
 
-.work-l-img, .work-s-img { transition: transform 0.6s var(--ease); }
-@media (hover: hover) {
-  .work-l-img:hover, .work-s-img:hover { transform: scale(1.02); }
+.work--flip .work__media { order: 2; }
+
+.work__media {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 4 / 3;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+.work__media--mint   { background: var(--tint-mint); }
+.work__media--blue   { background: var(--tint-blue); }
+.work__media--yellow { background: var(--tint-yellow); }
+.work__media img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s var(--ease); }
+@media (hover: hover) { .work:hover .work__media img { transform: scale(1.04); } }
+.ph { font-size: var(--fs-caption); color: var(--text-secondary); letter-spacing: 0.08em; }
+
+.work__meta {
+  display: flex; align-items: center; gap: var(--space-3);
+  margin-bottom: var(--space-3);
+  font-size: var(--fs-caption); color: var(--text-secondary);
+}
+.work__num { font-family: var(--font-display); font-weight: var(--fw-bold); color: var(--accent-deep); }
+.work__title { margin-bottom: var(--space-3); font-size: var(--fs-h2); font-weight: var(--fw-bold); line-height: 1.35; }
+.work__what { font-size: var(--fs-sm); color: var(--text-secondary); }
+.work__key {
+  margin-top: var(--space-6);
+  padding: var(--space-6);
+  border-radius: var(--radius-sm);
+  background: var(--bg-alt);
+  font-size: var(--fs-sm);
+}
+.work__key b {
+  display: block;
+  margin-bottom: var(--space-2);
+  padding-bottom: var(--space-2);
+  border-bottom: 2px solid var(--accent);   /* GEPPY 標題下的短綠線 */
+  width: fit-content;
+  font-size: var(--fs-caption);
+  letter-spacing: 0.08em;
+  color: var(--accent-deep);
 }
 
 /* ==========================================================================
-   ⑤ 合作流程 —— 直向時間線
+   ⑤ 合作流程
    ========================================================================== */
 
 .steps {
-  margin: var(--space-20) 0 0;
-  padding: 0;
-  list-style: none;
-  max-width: 760px;
-}
-
-.step {
   display: grid;
-  grid-template-columns: 120px 1fr;
-  gap: var(--space-8);
-  padding-block: var(--space-8);
-  border-top: 1px solid var(--ink-border);
-}
-.step:last-child { border-bottom: 1px solid var(--ink-border); }
-
-.step__num {
-  font-family: var(--font-display);
-  font-size: 64px;
-  font-weight: var(--fw-display);
-  line-height: 1;
-  color: var(--ink-text);
-}
-.step__body h3 { margin-bottom: var(--space-2); font-size: var(--fs-h3); font-weight: var(--fw-bold); }
-.step__body p  { font-size: var(--fs-sm); color: var(--ink-text-secondary); max-width: 28em; }
-
-.dnote {
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: var(--space-6);
   margin-top: var(--space-12);
-  font-size: var(--fs-lead);
-  color: var(--ink-text-secondary);
 }
-.dnote em { font-style: normal; color: var(--ink-text); font-weight: var(--fw-bold); }
+.step {
+  padding: var(--space-8);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+}
+.step__num {
+  display: inline-block;
+  margin-bottom: var(--space-4);
+  font-family: var(--font-display);
+  font-size: 32px;
+  font-weight: var(--fw-bold);
+  color: var(--accent);
+}
+.step h3 { margin-bottom: var(--space-2); font-size: var(--fs-h3); font-weight: var(--fw-bold); }
+.step p  { font-size: var(--fs-sm); color: var(--text-secondary); }
+
+.dnote { margin-top: var(--space-12); font-size: var(--fs-lead); color: var(--text-secondary); }
+.dnote em { font-style: normal; font-weight: var(--fw-bold); color: var(--text-primary); }
 
 /* ==========================================================================
-   ⑥ 關於我 + 聯絡
+   ⑥ 關於我 ＋ 聯絡
    ========================================================================== */
 
 .about {
   display: grid;
-  gap: var(--space-12);
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: var(--space-12);
   align-items: start;
 }
-.about__text p { margin-top: var(--space-4); color: var(--text-secondary); max-width: 26em; }
+.about__text p { margin-top: var(--space-4); max-width: 26em; color: var(--text-secondary); }
 .about__text p:first-of-type { color: var(--text-primary); font-size: var(--fs-lead); }
 
 .about__cta {
   padding: var(--space-8);
-  border-radius: var(--radius-none);
-  background: var(--surface);
+  border-radius: var(--radius-lg);
+  background: var(--tint-mint);
 }
 .about__cta h3 { margin-bottom: var(--space-2); font-size: var(--fs-h3); font-weight: var(--fw-bold); }
 .about__cta p  { margin-bottom: var(--space-6); font-size: var(--fs-sm); color: var(--text-secondary); }
-.about__cta .hero__actions { justify-content: flex-start; margin: 0; }
+.about__cta .hero__actions { margin-top: 0; }
+
+/* ==========================================================================
+   Footer
+   ========================================================================== */
+
+.site-footer { padding-block: var(--space-12); }
+.site-footer__inner {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+  gap: var(--space-4);
+  padding-top: var(--space-8);
+  border-top: 1px solid var(--border);
+  font-size: var(--fs-sm);
+  color: var(--text-secondary);
+}
+.site-footer a { color: var(--accent-deep); font-weight: var(--fw-bold); }
+.site-footer a:hover { text-decoration: underline; }
+
+/* ==========================================================================
+   進場動態
+   隱藏狀態綁在 .js-reveal（reveal.js 加在 <html> 上）——
+   直接寫 opacity:0 的話，JS 沒載到或關掉動效時整頁會是空白
+   ========================================================================== */
+
+.js-reveal [data-reveal] { opacity: 0; transform: translateY(24px); }
+.js-reveal [data-reveal].is-in {
+  opacity: 1;
+  transform: none;
+  transition: opacity 0.7s var(--ease) var(--d, 0s),
+              transform 0.7s var(--ease) var(--d, 0s);
+}
 
 /* ==========================================================================
    RWD
    ========================================================================== */
 
-@media (max-width: 720px) {
-  .section { padding-block: var(--space-20); }
-  .section__title { max-width: 100%; }
-  .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; margin-top: var(--space-8); }
-  .sub { margin-top: var(--space-12); }
-  .addons { grid-template-columns: 1fr; }
-
-  /* 作品：單欄。偏移與交錯在窄螢幕會打架，全部取消 */
-  .work-item__inner {
-    grid-template-columns: 1fr;
-    gap: var(--space-6);
-    min-height: 0;
-    width: 100%;
-    padding-inline: var(--gutter);
-  }
-  .work-item.-reversed .work-item__inner { grid-template-columns: 1fr; }
-  .work-item.-reversed .work-content { order: 0; }
-  .work-l-img { margin: 0 !important; }
-  /* 交錯版的 .work-item.-reversed .work-s-img 優先級比這裡高，
-     不寫死就會留著 margin-right:-108px 撐出橫向捲動 */
-  .work-s-img,
-  .work-item.-reversed .work-s-img {
-    width: 60%;
-    margin: var(--space-4) auto 0;
-  }
-  .work-item + .work-item { margin-top: var(--space-20); }
-  .work-num { margin-left: 0; }
-  .work-info { width: 100%; }
-
-  .nav, .btn-oval { display: none; }
-  .hero__scroll { display: none; }
-  .hero__lead { padding-right: 0; }
-  .ln--a, .ln--c { margin-left: 0; }
+@media (max-width: 900px) {
+  .nav { display: none; }
 }
-  .steps { margin-top: var(--space-12); }
-  .step { grid-template-columns: 1fr; gap: var(--space-3); }
-  .sub { margin-top: var(--space-12); }
+
+@media (max-width: 720px) {
+  :root { --gutter: 20px; }
+
+  .site-header__cta .btn--secondary { display: none; }
+  .section { padding-block: var(--space-12); }
+  .hero { padding-block: var(--space-20) var(--space-12); }
+
+  .panel { padding: var(--space-12) var(--space-6); border-radius: var(--radius-lg); }
+
+  .tint-cards, .plans, .steps { grid-template-columns: 1fr; margin-top: var(--space-8); }
   .addons { grid-template-columns: 1fr; }
-  .about__cta .btn { width: 100%; }
+
+  .work { grid-template-columns: 1fr; gap: var(--space-6); padding: var(--space-6); border-radius: var(--radius-lg); }
+  .work--flip .work__media { order: 0; }
+
+  .hero__actions { flex-direction: column; }
+  .hero__actions .btn { width: 100%; }
+
+  /* 手機上有機色塊縮小、且不跑動畫（省電） */
+  .blob { opacity: 0.4; animation: none; }
+  .blob--1 { width: 70vw; }
+  .blob--2 { width: 50vw; }
+  .blob--3 { display: none; }
+
+  .site-footer__inner { flex-direction: column; align-items: flex-start; }
 }

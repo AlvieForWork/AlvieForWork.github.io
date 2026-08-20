@@ -7,7 +7,6 @@
   <title>ALSO ｜ 網頁設計</title>
   <meta name="description" content="我做網頁設計。用 AI 把產出速度拉到最滿，但每一個設計決定都是人做的。">
 
-  <!-- Threads 分享出去的預覽卡片吃這幾行。og:image 待補（1200×630） -->
   <meta property="og:type" content="website">
   <meta property="og:title" content="ALSO ｜ 網頁設計">
   <meta property="og:description" content="用 AI 把產出速度拉到最滿，但每一個設計決定都是人做的。">
@@ -17,7 +16,7 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Noto+Sans+TC:wght@400;700&family=Noto+Serif+TC:wght@400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Noto+Sans+TC:wght@400;700&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="tokens.css">
   <link rel="stylesheet" href="style.css">
@@ -28,227 +27,205 @@
     <div class="site-header__inner">
       <a class="wordmark" href="/">ALSO</a>
       <nav class="nav">
-        <a href="#cases">作品</a>
-        <a href="#services">服務</a>
-        <a href="#flow">流程</a>
-        <a href="#about">關於</a>
+        <a href="#problems">我能解決什麼</a>
+        <a href="#services">服務與價格</a>
+        <a href="#cases">精選作品</a>
+        <a href="#flow">合作流程</a>
       </nav>
-      <a class="btn-oval" href="#about">預約免費診斷</a>
+      <div class="site-header__cta">
+        <a class="btn btn--secondary btn--sm" href="#about">下載自檢表</a>
+        <a class="btn btn--primary btn--sm" href="#about">預約免費診斷</a>
+      </div>
     </div>
   </header>
 
   <main>
-    <!-- ① HERO —— 照 Antara：每一行有自己的縮排，字間固定 36px。
-         沒有置中大標＋兩顆按鈕，只有大標與捲動指示 -->
+
+    <!-- ① HERO -->
     <section class="hero">
-      <!-- 背景光暈。Antara 是用 canvas 即時算的網格漸層，
-           這裡用兩團 radial-gradient 加模糊，效果接近但成本是 0 KB -->
-      <div class="hero__glow" aria-hidden="true"></div>
+      <!-- 有機曲線裝飾：CSS border-radius 的四組不對稱百分比，
+           比 SVG 好的地方是可以直接用 animation 讓它慢慢變形飄動 -->
+      <div class="blobs" aria-hidden="true">
+        <span class="blob blob--1"></span>
+        <span class="blob blob--2"></span>
+        <span class="blob blob--3"></span>
+      </div>
 
-      <h1 class="hero__display">
-        <span class="ln ln--a"><i>Design,</i></span>
-        <span class="ln ln--b"><i>not</i></span>
-        <span class="ln ln--c"><i>templates.</i></span>
-      </h1>
-
-      <p class="hero__lead">我做網頁設計。用 AI 把產出速度拉到最滿，但每一個設計決定，<strong>都是人做的</strong>。</p>
-
-      <div class="hero__scroll" aria-hidden="true">
-        <!-- 圓周文字要用 SVG textPath，用 div 加 text-align:center 只會擠成一團 -->
-        <svg class="hero__scroll-ring" viewBox="0 0 100 100">
-          <defs>
-            <path id="ringPath" fill="none"
-                  d="M 50,50 m -36,0 a 36,36 0 1,1 72,0 a 36,36 0 1,1 -72,0" />
-          </defs>
-          <text><textPath href="#ringPath" startOffset="0">SCROLL DOWN · SCROLL DOWN · </textPath></text>
-        </svg>
-        <span class="hero__scroll-line"></span>
+      <div class="container hero__inner">
+        <h1 class="hero__display" data-reveal>Design,<br>not <em>templates.</em></h1>
+        <p class="hero__lead" data-reveal>我做網頁設計。用 AI 把產出速度拉到最滿，但每一個設計決定，<strong>都是人做的</strong>。</p>
+        <div class="hero__actions" data-reveal>
+          <a class="btn btn--primary" href="#about">預約免費診斷</a>
+          <a class="btn btn--secondary" href="#about">下載自檢表</a>
+        </div>
+        <p class="hero__note" data-reveal>目前開放 3 個開場價名額</p>
       </div>
     </section>
 
-    <!-- ② 我能解決什麼問題（深色區塊 1／2） -->
-    <section class="section section--dark" id="problems">
+    <!-- ② 我能解決什麼 —— 三張淡色圓角卡（GEPPY hero 下方那一排的做法） -->
+    <section class="section" id="problems">
       <div class="container">
-        <p class="eyebrow">我能解決什麼</p>
-        <h2 class="section__title">你的網站不是不好看，是<em>沒有規則</em>。</h2>
-        <div class="grid-3">
-          <article class="dcard">
-            <p class="dcard__num">01</p>
+        <p class="eyebrow" data-reveal>我能解決什麼</p>
+        <h2 class="section__title" data-reveal>你的網站不是不好看，是<em class="mark">沒有規則</em>。</h2>
+
+        <ul class="tint-cards">
+          <li class="tcard tcard--mint" data-reveal>
+            <span class="tcard__num">01</span>
             <h3>AI 生成的網站沒有系統</h3>
             <p>每一頁的圓角、間距、字級都對不上，因為它們是分別生出來的，沒有一份共同的規則。</p>
-          </article>
-          <article class="dcard">
-            <p class="dcard__num">02</p>
+          </li>
+          <li class="tcard tcard--blue" data-reveal>
+            <span class="tcard__num">02</span>
             <h3>改一次就走鐘一次</h3>
             <p>你自己加一個區塊，顏色就跑掉了。問題不在那個區塊，在沒有一份寫清楚它該長怎樣的檔案。</p>
-          </article>
-          <article class="dcard">
-            <p class="dcard__num">03</p>
+          </li>
+          <li class="tcard tcard--yellow" data-reveal>
+            <span class="tcard__num">03</span>
             <h3>我交付的是規則，不是圖</h3>
             <p>一份 token 檔加一份 AI 指南。下次你自己叫 AI 生成新頁面，貼進去就不會走鐘。</p>
-          </article>
-        </div>
+          </li>
+        </ul>
       </div>
     </section>
 
-    <!-- ③ 服務與價格 -->
+    <!-- ③ 服務與價格 —— 淺灰底 ＋ 48px 大圓角容器（GEPPY 的區塊做法） -->
     <section class="section" id="services">
       <div class="container">
-        <p class="eyebrow">服務與價格</p>
-        <h2 class="section__title">兩個主要品項，價格公開。</h2>
-        <p class="section__lead">開場價限前三個案子，之後恢復正常價。<br>價格公開是因為你不該為了問價錢先跟我開一次會。</p>
+        <div class="panel">
+          <p class="eyebrow" data-reveal>服務與價格</p>
+          <h2 class="section__title" data-reveal>兩個主要品項，<em class="mark">價格公開</em>。</h2>
+          <p class="section__lead" data-reveal>開場價限前三個案子，之後恢復正常價。<br>價格公開是因為你不該為了問價錢先跟我開一次會。</p>
 
-        <div class="grid-2">
-          <article class="scard">
-            <span class="pill pill--solid">開放 3 個名額</span>
-            <h3 class="scard__name">一頁式網站</h3>
-            <p class="scard__price"><b>15,000</b> <s>30,000</s></p>
-            <ul class="ticks">
-              <li>6–8 個區塊，含手機版</li>
-              <li>視覺方向 2 次、細節調整 1 輪</li>
-              <li>交付原始碼與 token 檔</li>
-              <li>網域與部署開在你名下</li>
-            </ul>
-          </article>
-          <article class="scard">
-            <span class="pill pill--solid">開放 3 個名額</span>
-            <h3 class="scard__name">多頁形象網站</h3>
-            <p class="scard__price"><b>30,000</b> <s>50,000</s></p>
-            <ul class="ticks">
-              <li>5 頁，含手機版</li>
-              <li>視覺方向 2 次、細節調整 1 輪</li>
-              <li>交付原始碼與 token 檔</li>
-              <li>網域與部署開在你名下</li>
-            </ul>
-          </article>
+          <div class="plans">
+            <article class="plan" data-reveal>
+              <span class="pill pill--solid">開放 3 個名額</span>
+              <h3 class="plan__name">一頁式網站</h3>
+              <p class="plan__price"><b>15,000</b> <s>30,000</s></p>
+              <ul class="ticks">
+                <li>6–8 個區塊，含手機版</li>
+                <li>視覺方向 2 次、細節調整 1 輪</li>
+                <li>交付原始碼與 token 檔</li>
+                <li>網域與部署開在你名下</li>
+              </ul>
+            </article>
+            <article class="plan" data-reveal>
+              <span class="pill pill--solid">開放 3 個名額</span>
+              <h3 class="plan__name">多頁形象網站</h3>
+              <p class="plan__price"><b>30,000</b> <s>50,000</s></p>
+              <ul class="ticks">
+                <li>5 頁，含手機版</li>
+                <li>視覺方向 2 次、細節調整 1 輪</li>
+                <li>交付原始碼與 token 檔</li>
+                <li>網域與部署開在你名下</li>
+              </ul>
+            </article>
+          </div>
+
+          <h3 class="sub" data-reveal>加購與其他</h3>
+          <ul class="addons" data-reveal>
+            <li><span>既有網站重設計</span><b>15,000–25,000 ／頁</b></li>
+            <li><span>設計系統交付（token 檔 ＋ AI 指南）</span><b>12,000 起</b></li>
+            <li><span>網站上線設定（網域、DNS、部署、SSL）</span><b>3,000–5,000</b></li>
+            <li><span>維護方案（6 次內容更新、3 個工作天回覆）</span><b>12,000 ／年</b></li>
+            <li><span>單次修改</span><b>800 ／小時</b></li>
+            <li><span>免費診斷</span><b>0</b></li>
+          </ul>
+          <p class="fineprint" data-reveal>不含文案撰寫、攝影、素材購買、網域與主機費用。<br>訂金 50% 開工、尾款 50% 上線前。素材超過 14 天未提供則專案暫停。</p>
         </div>
+      </div>
+    </section>
 
-        <h3 class="sub">加購與其他</h3>
-        <ul class="addons">
-          <li><span>既有網站重設計</span><b>15,000–25,000 ／頁</b></li>
-          <li><span>設計系統交付（token 檔 ＋ AI 指南）</span><b>12,000 起</b></li>
-          <li><span>網站上線設定（網域、DNS、部署、SSL）</span><b>3,000–5,000</b></li>
-          <li><span>維護方案（6 次內容更新、3 個工作天回覆）</span><b>12,000 ／年</b></li>
-          <li><span>單次修改</span><b>800 ／小時</b></li>
-          <li><span>免費診斷</span><b>0</b></li>
+    <!-- ④ 精選作品 —— 白卡，圖片區用淡色底 -->
+    <section class="section" id="cases">
+      <div class="container">
+        <p class="eyebrow" data-reveal>精選作品</p>
+        <h2 class="section__title" data-reveal>差異化不是畫面好看，是<em class="mark">決策說得清楚</em>。</h2>
+
+        <ul class="works">
+          <li class="work" data-reveal>
+            <figure class="work__media work__media--mint"><span class="ph">主視覺</span></figure>
+            <div class="work__body">
+              <p class="work__meta"><span class="work__num">01–003</span><span>企業後台 ／ 2026</span></p>
+              <h3 class="work__title">8 種角色的權限管理</h3>
+              <p class="work__what">子帳號、部門、操作紀錄、批次匯入四個模組，從資訊架構盤點做到可點擊的原型。</p>
+              <p class="work__key"><b>一個關鍵決策</b>模擬身份不做進帳號卡的標籤，改成獨立的浮動列。因為「我現在是誰」和「我的帳號是誰」是兩件事，混在一起使用者會誤判自己有沒有權限。</p>
+            </div>
+          </li>
+          <li class="work work--flip" data-reveal>
+            <figure class="work__media work__media--blue"><span class="ph">主視覺</span></figure>
+            <div class="work__body">
+              <p class="work__meta"><span class="work__num">02–003</span><span>登入與帳號安全 ／ 2026</span></p>
+              <h3 class="work__title">登入前五頁與雙因素驗證</h3>
+              <p class="work__what">登入、2FA 綁定、忘記密碼、鎖定、解鎖，五頁共用一份 token 檔與一套版型規範。</p>
+              <p class="work__key"><b>一個關鍵決策</b>密碼鎖與驗證碼鎖是兩個獨立的永久鎖，都只能由客服解。自動解鎖等於給暴力破解無限次機會，而兩種鎖混用會讓客服查不出使用者到底卡在哪。</p>
+            </div>
+          </li>
+          <li class="work" data-reveal>
+            <figure class="work__media work__media--yellow"><span class="ph">主視覺</span></figure>
+            <div class="work__body">
+              <p class="work__meta"><span class="work__num">03–003</span><span>自己的產品 ／ 2026</span></p>
+              <h3 class="work__title">選股條件篩選工具</h3>
+              <p class="work__what">從想法到上線的完整流程：規格、介面、前後端、部署，一個人用 AI 協作完成。</p>
+              <p class="work__key"><b>一個關鍵決策</b>把判斷條件攤開讓使用者自己調，不做「推薦清單」。工具給的是理由，不是答案 —— 一旦給答案就要為結果負責，那是另一種生意。</p>
+            </div>
+          </li>
         </ul>
-        <p class="fineprint">不含文案撰寫、攝影、素材購買、網域與主機費用。<br>訂金 50% 開工、尾款 50% 上線前。素材超過 14 天未提供則專案暫停。</p>
       </div>
     </section>
 
-    <!-- ④ 作品 —— 照 Antara /work 的 work-item：
-         文字欄置中、大圖偏出容器一側、小圖偏出另一側並與大圖垂直交錯 -->
-    <section class="section works" id="cases">
+    <!-- ⑤ 合作流程 —— 淺灰底大圓角容器 ＋ 手繪感連接曲線 -->
+    <section class="section" id="flow">
       <div class="container">
-        <p class="works-header"><span>精選作品</span><span>PROJECTS</span></p>
-      </div>
+        <div class="panel">
+          <p class="eyebrow" data-reveal>合作流程</p>
+          <h2 class="section__title" data-reveal>從問我一句話到網站上線，<em class="mark">四步</em>。</h2>
 
-      <ol class="works-list">
-        <li class="work-item" data-reveal>
-          <div class="work-item__inner">
-            <div class="work-content">
-              <div class="work-info">
-                <span class="work-num">01–003</span>
-                <p class="work-client">企業後台 ／ 2026</p>
-                <h3 class="work-title">8 種角色的權限管理</h3>
-                <p class="work-what">子帳號、部門、操作紀錄、批次匯入四個模組，從資訊架構盤點做到可點擊的原型。</p>
-                <p class="work-key"><b>一個關鍵決策</b>模擬身份不做進帳號卡的標籤，改成獨立的浮動列。因為「我現在是誰」和「我的帳號是誰」是兩件事，混在一起使用者會誤判自己有沒有權限。</p>
-              </div>
-              <figure class="work-s-img" data-parallax><span class="ph">細節圖</span></figure>
-            </div>
-            <figure class="work-l-img" data-parallax><span class="ph">主視覺</span></figure>
-          </div>
-        </li>
-        <li class="work-item -reversed" data-reveal>
-          <div class="work-item__inner">
-            <div class="work-content">
-              <div class="work-info">
-                <span class="work-num">02–003</span>
-                <p class="work-client">登入與帳號安全 ／ 2026</p>
-                <h3 class="work-title">登入前五頁與雙因素驗證</h3>
-                <p class="work-what">登入、2FA 綁定、忘記密碼、鎖定、解鎖，五頁共用一份 token 檔與一套版型規範。</p>
-                <p class="work-key"><b>一個關鍵決策</b>密碼鎖與驗證碼鎖是兩個獨立的永久鎖，都只能由客服解。自動解鎖等於給暴力破解無限次機會，而兩種鎖混用會讓客服查不出使用者到底卡在哪。</p>
-              </div>
-              <figure class="work-s-img" data-parallax><span class="ph">細節圖</span></figure>
-            </div>
-            <figure class="work-l-img" data-parallax><span class="ph">主視覺</span></figure>
-          </div>
-        </li>
-        <li class="work-item" data-reveal>
-          <div class="work-item__inner">
-            <div class="work-content">
-              <div class="work-info">
-                <span class="work-num">03–003</span>
-                <p class="work-client">自己的產品 ／ 2026</p>
-                <h3 class="work-title">選股條件篩選工具</h3>
-                <p class="work-what">從想法到上線的完整流程：規格、介面、前後端、部署，一個人用 AI 協作完成。</p>
-                <p class="work-key"><b>一個關鍵決策</b>把判斷條件攤開讓使用者自己調，不做「推薦清單」。工具給的是理由，不是答案 —— 一旦給答案就要為結果負責，那是另一種生意。</p>
-              </div>
-              <figure class="work-s-img" data-parallax><span class="ph">細節圖</span></figure>
-            </div>
-            <figure class="work-l-img" data-parallax><span class="ph">主視覺</span></figure>
-          </div>
-        </li>
-      </ol>
-    </section>
-
-    <!-- ⑤ 合作流程 —— 直向時間線，不是卡片 -->
-    <section class="section section--dark" id="flow">
-      <div class="container">
-        <p class="eyebrow">合作流程</p>
-        <h2 class="section__title">從問我一句話到網站上線，<em>四步</em>。</h2>
-        <ol class="steps">
-          <li class="step">
-            <span class="step__num">01</span>
-            <div class="step__body">
+          <ol class="steps">
+            <li class="step" data-reveal>
+              <span class="step__num">01</span>
               <h3>免費診斷</h3>
               <p>把網址給我，我看一遍列出 5 個具體問題。不收費、不綁約，不合適就到這裡為止。</p>
-            </div>
-          </li>
-          <li class="step">
-            <span class="step__num">02</span>
-            <div class="step__body">
+            </li>
+            <li class="step" data-reveal>
+              <span class="step__num">02</span>
               <h3>報價與範圍</h3>
               <p>寫清楚做幾頁、改幾輪、什麼不含。你同意才收訂金，收了訂金才開工。</p>
-            </div>
-          </li>
-          <li class="step">
-            <span class="step__num">03</span>
-            <div class="step__body">
+            </li>
+            <li class="step" data-reveal>
+              <span class="step__num">03</span>
               <h3>設計與確認</h3>
               <p>先給能在瀏覽器打開的畫面，不是圖片。你直接點、直接看手機版，改完再進下一輪。</p>
-            </div>
-          </li>
-          <li class="step">
-            <span class="step__num">04</span>
-            <div class="step__body">
+            </li>
+            <li class="step" data-reveal>
+              <span class="step__num">04</span>
               <h3>交付與交接</h3>
               <p>網域與部署開在你名下，原始碼全部給你，附一份「怎麼交給下一個人接手」的說明。</p>
-            </div>
-          </li>
-        </ol>
-        <p class="dnote">最後一項是認真的：<em>你隨時可以換人接手。</em>被綁住的網站不是好網站。</p>
+            </li>
+          </ol>
+
+          <p class="dnote" data-reveal>最後一項是認真的：<em>你隨時可以換人接手。</em>被綁住的網站不是好網站。</p>
+        </div>
       </div>
     </section>
 
-    <!-- ⑥ 關於我 + 聯絡 -->
+    <!-- ⑥ 關於我 ＋ 聯絡 -->
     <section class="section" id="about">
       <div class="container about">
         <div class="about__text">
-          <p class="eyebrow">關於</p>
-          <h2 class="section__title">設計師定規格，AI 做生產。</h2>
-          <p>我是設計師，不是工程師，也不是 AI 的操作員。</p>
-          <p>白天做企業後台的介面與設計系統 —— 那種有 8 種角色、幾十個狀態、錯一個地方就會有人客訴的產品。晚上用同一套方法幫人做網站。</p>
-          <p>AI 讓我一天能出二十個版本，但決定哪一個版本能上線的，還是人。你付錢買的是那個判斷。</p>
+          <p class="eyebrow" data-reveal>關於</p>
+          <h2 class="section__title" data-reveal>設計師定規格，<em class="mark">AI 做生產</em>。</h2>
+          <p data-reveal>我是設計師，不是工程師，也不是 AI 的操作員。</p>
+          <p data-reveal>白天做企業後台的介面與設計系統 —— 那種有 8 種角色、幾十個狀態、錯一個地方就會有人客訴的產品。晚上用同一套方法幫人做網站。</p>
+          <p data-reveal>AI 讓我一天能出二十個版本，但決定哪一個版本能上線的，還是人。你付錢買的是那個判斷。</p>
         </div>
-        <div class="about__cta">
+        <aside class="about__cta" data-reveal>
           <h3>先從免費診斷開始</h3>
           <p>把網址給我，我看一遍，列出 5 個具體問題。<br>不收費，也不會有後續推銷。</p>
           <div class="hero__actions">
             <a class="btn btn--primary" href="#">預約免費診斷</a>
             <a class="btn btn--secondary" href="#">下載自檢表</a>
           </div>
-        </div>
+        </aside>
       </div>
     </section>
 
@@ -262,10 +239,6 @@
     </div>
   </footer>
 
-  <!-- 膠囊物理暫時停用：Antara 的 hero 只有大標與捲動指示。要還原就把這兩行取消註解
-  <script src="https://cdn.jsdelivr.net/npm/matter-js@0.20.0/build/matter.min.js" defer></script>
-  <script src="physics.js" defer></script>
-  -->
   <script src="reveal.js" defer></script>
 
 </body>
